@@ -67,7 +67,47 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("delete-restaurant-by-id/{restaurantId}")]
+        public async Task<IActionResult> DeleteById(int restaurantId)
+        {
+            try
+            {
+                await _restaurant.DeleteRestaurantById(restaurantId);
+                return Ok($"Restaurant is deleted succesfully!");
+            }
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpDelete("delete-restaurant-by-name/{restaurantName}")]
+        public async Task<IActionResult> DeleteByName(string restaurantName)
+        {
+            try
+            {
+                await _restaurant.DeleteRestaurantByName(restaurantName);
+                return Ok($"Restaurant is deleted succesfully!");
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+        [HttpPut("update-restaurant/{id}")]
+        public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantAddRequest restaurant, int id)
+        {
+            try
+            {
+                var updateRestaurant = mapper.Map<Restaurant>(restaurant);
+                await _restaurant.UpdateRestaurant(id, updateRestaurant);
+                return Ok("The restaurant has been updated!");
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        //end
     }
 }
 

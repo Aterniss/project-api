@@ -8,5 +8,8 @@ namespace Project_API.Repositories
         Task<Restaurant> GetById(int id);
         Task<Restaurant> GetByName(string restaurantName);
         Task AddRestaurant(Restaurant newRestaurant);
+        Task DeleteRestaurantById(int id);
+        Task DeleteRestaurantByName(string restaurantName);
+        Task UpdateRestaurant(int id, Restaurant updateRestaurant);
     }
 }

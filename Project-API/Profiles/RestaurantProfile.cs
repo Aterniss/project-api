@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Project_API.DTO;
+using Project_API.DTO.RequestModels;
 using Project_API.Models;
 
 namespace Project_API.Profiles
@@ -13,6 +14,8 @@ namespace Project_API.Profiles
             CreateMap<FoodCategory, FoodCategoryDTO>()
          .ReverseMap();
             CreateMap<Zone, ZoneDTO>()
+         .ReverseMap();
+            CreateMap<Restaurant, RestaurantAddRequest>()
          .ReverseMap();
         }
     }
