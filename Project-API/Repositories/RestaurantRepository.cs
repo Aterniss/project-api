@@ -63,16 +63,6 @@ namespace Project_API.Repositories
             return result;
         }
 
-        public async Task<Restaurant> GetByName(string restaurantName)
-        {
-            var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantName == restaurantName);
-            if (result == null)
-            {
-                return null;
-            }
-            return result;
-        }
-
         public async Task UpdateRestaurant(int id, Restaurant updateRestaurant)
         {
             var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == id);
@@ -110,6 +100,11 @@ namespace Project_API.Repositories
                 throw new Exception($"The given \"zone id\" and \"category\" does not exist.");
             }
 
-        } 
+        }
+
+        public Task<Restaurant> GetByName(string restaurantName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

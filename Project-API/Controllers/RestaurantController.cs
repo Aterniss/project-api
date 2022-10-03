@@ -36,17 +36,6 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<RestaurantDTO>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-restaurant-by-name/{restaurantName}")]
-        public async Task<IActionResult> GetByName(string restaurantName)
-        {
-            var result = await _restaurant.GetByName(restaurantName);
-            if (result == null)
-            {
-                return NotFound($"Restaurant with name: \"{restaurantName}\" was not founded!");
-            }
-            var resultDTO = mapper.Map<RestaurantDTO>(result);
-            return Ok(resultDTO);
-        }
         [HttpPost("add-restaurant")]
         public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
