@@ -73,7 +73,7 @@ namespace Project_API.Controllers
 
         }
         [HttpPut("update-category/{name}")]
-        public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryUpdateRequest newCategory, string name)
+        public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)
         {
             var category = new FoodCategory()
             {

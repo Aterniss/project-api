@@ -15,7 +15,7 @@ namespace Project_API.Profiles
          .ReverseMap();
             CreateMap<Zone, ZoneDTO>()
          .ReverseMap();
-            CreateMap<Restaurant, RestaurantAddRequest>()
+            CreateMap<Restaurant, RestaurantRequestModel>()
          .ReverseMap();
         }
     }

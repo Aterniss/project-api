@@ -48,7 +48,7 @@ namespace Project_API.Controllers
             return Ok(resultDTO);
         }
         [HttpPost("add-restaurant")]
-        public async Task<IActionResult> AddRestaurant([FromBody]RestaurantAddRequest newRestaurant)
+        public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
             try
             { 
@@ -94,7 +94,7 @@ namespace Project_API.Controllers
             }
         }
         [HttpPut("update-restaurant/{id}")]
-        public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantAddRequest restaurant, int id)
+        public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {
             try
             {

@@ -1,6 +1,6 @@
 ﻿namespace Project_API.DTO.RequestModels
 {
-    public class RestaurantAddRequest
+    public class RestaurantRequestModel
     {
         public string? RestaurantName { get; set; }
         public string? CategoryName { get; set; }
