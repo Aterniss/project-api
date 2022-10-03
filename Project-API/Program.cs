@@ -18,6 +18,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
 builder.Services.AddScoped<IDishRepository, DishRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 
