@@ -17,6 +17,7 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 //inject repositories:
 builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
 builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddScoped<IDishRepository, DishRepository>();
 
 
 
