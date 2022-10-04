@@ -8,7 +8,7 @@ using Project_API.Repositories;
 namespace Project_API.Controllers
 {
     [ApiController]
-    [Route("Zones")]
+    [Route("zones")]
     public class ZoneController : Controller
     {
         private readonly IZoneRepository _zone;

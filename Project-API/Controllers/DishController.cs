@@ -8,7 +8,7 @@ using Project_API.Repositories;
 namespace Project_API.Controllers
 {
     [ApiController]
-    [Route("Dishes")]
+    [Route("dishes")]
     public class DishController : Controller
     {
         private readonly IDishRepository _dish;

@@ -8,7 +8,7 @@ using Project_API.Repositories;
 namespace Project_API.Controllers
 {
     [ApiController]
-    [Route("Riders")]
+    [Route("riders")]
     public class RiderController : Controller
     {
         private readonly IRiderRepository _rider;

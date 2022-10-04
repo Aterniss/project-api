@@ -8,7 +8,7 @@ using Project_API.Repositories;
 namespace Project_API.Controllers
 {
     [ApiController]
-    [Route("Restaurants")]
+    [Route("restaurants")]
     public class RestaurantController : Controller
     {
         private readonly IRestaurantRepository _restaurant;

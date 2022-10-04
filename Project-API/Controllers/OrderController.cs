@@ -8,7 +8,7 @@ using Project_API.Repositories;
 namespace Project_API.Controllers
 {
     [ApiController]
-    [Route("Orders")]
+    [Route("orders")]
     public class OrderController : Controller
     {
         private readonly IOrderRepository _order;
