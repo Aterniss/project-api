@@ -43,6 +43,10 @@ namespace Project_API.Controllers
         [HttpPost("add-new-zone")]
         public async Task<IActionResult> AddZone([FromBody]ZoneRequestModel request)
         {
+            if(request.ZoneName == "")
+            {
+                return BadRequest("This field is required~!");
+            }
             try
             {
                 var newZone = new Zone()

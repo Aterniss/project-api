@@ -39,6 +39,10 @@ namespace Project_API.Controllers
         [HttpPost("add-restaurant")]
         public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
+            if(newRestaurant.ZoneId == 0)
+            {
+                return BadRequest("The given field: \"zone id\" is required!");
+            }
             try
             { 
             var addRestaurant = new Restaurant()
@@ -85,6 +89,10 @@ namespace Project_API.Controllers
         [HttpPut("update-restaurant/{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {
+            if (restaurant.ZoneId == 0)
+            {
+                return BadRequest("The given field: \"zone id\" is required!");
+            }
             try
             {
                 var updateRestaurant = mapper.Map<Restaurant>(restaurant);

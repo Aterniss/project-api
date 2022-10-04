@@ -82,7 +82,6 @@ namespace Project_API.Repositories
             }
         }
 
-        //check method
         public async Task CheckZoneAndCategoryName(string categoryName, int zoneId)
         {
             var zone = await _dbContext.Zones.Select(x => x.ZoneId == zoneId).FirstOrDefaultAsync();

@@ -13,7 +13,7 @@ namespace Project_API.Repositories
 
         public async Task AddNewOrder(Order order)
         {
-            await CheckUserIdAndRiderId(order.IdUser, order.OrderId);
+            await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             
@@ -69,20 +69,24 @@ namespace Project_API.Repositories
 
         public async Task CheckUserIdAndRiderId(int userId, int riderId)
         {
-            var checkUserId = await _context.Users.Select(x => x.IdUser == userId).FirstOrDefaultAsync();
-            var checkRiderId = await _context.Riders.Select(x => x.RiderId == riderId).FirstOrDefaultAsync();
-            if (checkRiderId == false && checkUserId == false)
+            var checkUserId = await _context.Users.FirstOrDefaultAsync(x => x.IdUser == userId);
+            var checkRiderId = await _context.Riders.FirstOrDefaultAsync(x => x.RiderId == riderId);
+            if (checkRiderId == null && checkUserId == null)
             {
                 throw new Exception($"User with ID: \"{userId}\" does not exist!\n Rider with ID: \"{riderId}\" does not exist!");
             }
-            else if (checkUserId == false && checkRiderId == true)
+            else if (checkUserId == null && checkRiderId != null)
             {
                 throw new Exception($"User with ID: \"{userId}\" does not exist!");
             }
-            else if (checkUserId == true && checkRiderId == false)
+            else if (checkUserId != null && checkRiderId == null)
             {
                 throw new Exception($"Rider with ID: \"{riderId}\" does not exist!");
-            } 
+            }
+            else
+            {
+
+            }
         }
     }
 }

@@ -52,6 +52,10 @@ namespace Project_API.Controllers
         [HttpPost("add-user")]
         public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
         {
+            if (request.FullName == "" || request.UserAddress == "")
+            {
+                return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+            }
             var newUser = new User()
             {
                 FullName = request.FullName,
@@ -66,6 +70,10 @@ namespace Project_API.Controllers
         [HttpPut("update-user-by-id/{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel request, int userId)
         {
+            if (request.FullName == "" || request.UserAddress == "")
+            {
+                return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+            }
             try
             {
                 var user = new User()

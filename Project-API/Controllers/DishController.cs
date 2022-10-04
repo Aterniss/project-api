@@ -56,6 +56,10 @@ namespace Project_API.Controllers
         [HttpPut("update-dish-by-id/{id}")]
         public async Task<IActionResult> UpdateDish([FromBody]DishRequestModel request, int id)
         {
+            if (request.DishDescription == "" || request.RestaurantId == 0 || request.Price == 0)
+            {
+                return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
+            }
             try
             {
                 var dishDTO = new DishDTO()
@@ -92,11 +96,17 @@ namespace Project_API.Controllers
         [HttpPost("add-new-dish")]
         public async Task<IActionResult> AddNewDish([FromBody]DishRequestModel request)
         {
+            if(request.DishDescription =="" || request.RestaurantId == 0 || request.Price == 0)
+            {
+                return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
+            }
             try
             {
-                var newDish = mapper.Map<Dish>(request);
-                await _dish.AddNewDish(newDish);
-                return Ok("Succesfully added!");
+     
+                    var newDish = mapper.Map<Dish>(request);
+                    await _dish.AddNewDish(newDish);
+                    return Ok("Succesfully added!");
+                
             }
             catch(Exception ex)
             {

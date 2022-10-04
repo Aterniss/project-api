@@ -42,6 +42,11 @@ namespace Project_API.Controllers
         [HttpPost("add-new-category")]
         public async Task<IActionResult> AddCategoryAsync([FromBody] FoodCategoryDTO addNewCategory)
         {
+            if(addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
+            {
+                return BadRequest("The given fields cannot be empty!");
+            }
+
             try
             {
                 //Request DTO to domain model
@@ -75,6 +80,11 @@ namespace Project_API.Controllers
         [HttpPut("update-category/{name}")]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)
         {
+            if (newCategory.CategoryDescription == "")
+            {
+                return BadRequest("The given field cannot be empty!");
+            }
+
             var category = new FoodCategory()
             {
                 CategoryName = name,

@@ -43,6 +43,10 @@ namespace Project_API.Controllers
         [HttpPost("add-new-order")]
         public async Task<IActionResult> AddNewOrder([FromBody] OrderRequestModel orderRequest)
         {
+            if(orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
+            {
+                return BadRequest("The given fields are required!");
+            }
             try
             {
                 var newOrder = new Order()
@@ -77,6 +81,10 @@ namespace Project_API.Controllers
         [HttpPut("update-order-by-id/{orderId}")]
         public async Task<IActionResult> UpdateOrder([FromBody]OrderRequestModel request, int orderId)
         {
+            if (request.RiderId == 0 || request.IdUser == 0 || request.OrderStatus == "")
+            {
+                return BadRequest("The given fields are required!");
+            }
             try
             {
                 var updateOrder = new Order()

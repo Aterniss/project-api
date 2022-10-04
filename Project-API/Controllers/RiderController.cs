@@ -42,6 +42,10 @@ namespace Project_API.Controllers
         [HttpPost("add-new-rider")]
         public async Task<IActionResult> AddRider([FromBody]RiderRequestModel request)
         {
+            if (request.RiderName == "" || request.ZoneId == 0)
+            {
+                return BadRequest("The given fields are required!");
+            }
             try
             {
                 var newRider = new Rider()
@@ -73,6 +77,10 @@ namespace Project_API.Controllers
         [HttpPut("update-rider-by-id/{riderId}")]
         public async Task<IActionResult> UpdateRiderById([FromBody] RiderRequestModel request, int riderId)
         {
+            if (request.RiderName == "" || request.ZoneId == 0)
+            {
+                return BadRequest("The given fields are required!");
+            }
             try
             {
                 var updateRider = new Rider()
