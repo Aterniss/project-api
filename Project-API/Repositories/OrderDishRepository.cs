@@ -15,5 +15,26 @@ namespace Project_API.Repositories
         {
             return await _context.OrderDishes.ToListAsync();
         }
+
+        public async Task<IEnumerable<OrderDish>> GetByOrderId(int orderId)
+        {
+            var result = await _context.OrderDishes.Where(x => x.OrderId == orderId).ToListAsync();
+            if(result.Count == 0)
+            {
+                return null;
+            }
+            return result;
+        }
+
+        public async Task<IEnumerable<OrderDish>> GetByDishId(int dishId)
+        {
+            var result = await _context.OrderDishes.Where(x => x.DishId == dishId).ToListAsync();
+            if (result.Count == 0)
+            {
+                return null;
+            }
+            return result;
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -122,6 +122,8 @@ namespace Project_API.Models
                 entity.HasNoKey();
 
                 entity.ToTable("order_dishes");
+
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.DishId).HasColumnName("dish_id");
 
