@@ -6,7 +6,7 @@ namespace Project_API.Repositories
     {
         Task<IEnumerable<OrderDish>> GetAll();
         Task<IEnumerable<OrderDish>> GetByOrderId(int orderId);
-        Task<IEnumerable<OrderDish>> GetByDishId(int dishId);
-
+        Task AddOrderDishes(OrderDish orderDish);
+        Task DeleteOrderDishes(int orderId);
     }
 }

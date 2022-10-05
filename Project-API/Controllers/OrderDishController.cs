@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Project_API.DTO;
 using Project_API.DTO.RequestModels;
+using Project_API.Models;
 using Project_API.Repositories;
 
 namespace Project_API.Controllers
@@ -25,7 +26,7 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<List<OrderDishDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("order-dish/order-id/{orderId}")]
+        [HttpGet("{orderId}")]
         public async Task<IActionResult> GetByOrderId(int orderId)
         {
             var result = await _orderDish.GetByOrderId(orderId);
@@ -49,30 +50,33 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpGet("order-dish/dish-id/{dishId}")]
-        public async Task<IActionResult> GetByDishId(int dishId)
+        [HttpPost]
+        public async Task<IActionResult> AddNewOrderDishes([FromBody]OrderDishAddRequest request)
         {
-            var result = await _orderDish.GetByDishId(dishId);
-            if (result == null)
+            if(request.OrderId == 0 || request.DishId == 0)
             {
-                return NotFound($"Dish ID: \"{dishId}\" has not been found!");
+                return BadRequest("Something went wrong!");
             }
-            else
+            try
             {
-                List<int> orders = new List<int>();
-                foreach (var item in result)
+                var addNew = new OrderDish()
                 {
-                    orders.Add(item.OrderId);
-                }
-                //var resultDTO = mapper.Map<List<OrderDishDTO>>(result);
-                var resultDTO = new DishOrdersList()
-                {
-                    OrderId = orders,
-                    DishId = dishId
+                    DishId = request.DishId,
+                    OrderId = request.OrderId
                 };
-                return Ok(resultDTO);
+
+
+                await _orderDish.AddOrderDishes(addNew);
+
+                return Ok("Succesfully added!");
             }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+           
         }
+
 
 
     }

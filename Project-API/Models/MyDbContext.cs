@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -119,8 +119,6 @@ namespace Project_API.Models
 
             modelBuilder.Entity<OrderDish>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("order_dishes");
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -130,13 +128,13 @@ namespace Project_API.Models
                 entity.Property(e => e.OrderId).HasColumnName("order_id");
 
                 entity.HasOne(d => d.Dish)
-                    .WithMany()
+                    .WithMany(p => p.OrderDishes)
                     .HasForeignKey(d => d.DishId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_dishes_dishes");
 
                 entity.HasOne(d => d.Order)
-                    .WithMany()
+                    .WithMany(p => p.OrderDishes)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_dishes_orders");

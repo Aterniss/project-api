@@ -26,15 +26,37 @@ namespace Project_API.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<OrderDish>> GetByDishId(int dishId)
+
+        // toDo!
+        public async Task AddOrderDishes(OrderDish orderDish)
         {
-            var result = await _context.OrderDishes.Where(x => x.DishId == dishId).ToListAsync();
-            if (result.Count == 0)
+            var checkOrderId = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderDish.OrderId);
+            var checkDishId = await _context.Dishes.FirstOrDefaultAsync(x => x.DishId == orderDish.DishId);
+            if(checkOrderId == null && checkDishId == null)
             {
-                return null;
+                throw new Exception($"Order with ID: \"{orderDish.OrderId}\" does not exist!\nDish with ID: \"{orderDish.DishId}\" does not exist!");
             }
-            return result;
+            else if(checkDishId == null && checkOrderId != null)
+            {
+                throw new Exception($"Dish with ID: \"{orderDish.DishId}\" does not exist!");
+            }
+            else if(checkOrderId == null && checkDishId != null)
+            {
+                throw new Exception($"Order with ID: \"{orderDish.OrderId}\" does not exist!");
+            }
+            else
+            {
+                await _context.OrderDishes.AddAsync(orderDish);
+                await _context.SaveChangesAsync();
+            }
+
         }
 
+        public Task DeleteOrderDishes(int orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 }
