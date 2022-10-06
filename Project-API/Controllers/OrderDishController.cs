@@ -18,7 +18,7 @@ namespace Project_API.Controllers
             this._orderDish = orderDish;
             this.mapper = mapper;
         }
-      
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -30,14 +30,14 @@ namespace Project_API.Controllers
         public async Task<IActionResult> GetByOrderId(int orderId)
         {
             var result = await _orderDish.GetByOrderId(orderId);
-            if(result == null)
+            if (result == null)
             {
                 return NotFound($"Order ID: \"{orderId}\" has not been found!");
             }
             else
             {
                 List<int> dishes = new List<int>();
-                foreach(var item in result)
+                foreach (var item in result)
                 {
                     dishes.Add(item.DishId);
                 }
@@ -51,9 +51,9 @@ namespace Project_API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddNewOrderDishes([FromBody]OrderDishAddRequest request)
+        public async Task<IActionResult> AddNewOrderDishes([FromBody] OrderDishAddRequest request)
         {
-            if(request.OrderId == 0 || request.DishId == 0)
+            if (request.OrderId == 0 || request.DishId == 0)
             {
                 return BadRequest("Something went wrong!");
             }
@@ -70,14 +70,25 @@ namespace Project_API.Controllers
 
                 return Ok("Succesfully added!");
             }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        [HttpDelete("{orderId}")]
+        public async Task<IActionResult> DeleteById(int orderId)
+        {
+            try
+            {
+                await _orderDish.DeleteOrderDishes(orderId);
+                return Ok("Succesfully deleted!");
+            }
             catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-           
         }
-
-
 
     }
 }

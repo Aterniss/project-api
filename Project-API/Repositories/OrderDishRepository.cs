@@ -52,9 +52,18 @@ namespace Project_API.Repositories
 
         }
 
-        public Task DeleteOrderDishes(int orderId)
+        public async Task DeleteOrderDishes(int orderId)
         {
-            throw new NotImplementedException();
+            var result = await _context.OrderDishes.Where(x => x.OrderId == orderId).ToListAsync();
+            if (result.Count == 0)
+            {
+                throw new Exception($"Order with ID: \"{orderId}\" does not exist!");
+            }
+            else
+            {
+                _context.OrderDishes.RemoveRange(result);
+                await _context.SaveChangesAsync();
+            }
         }
 
         
