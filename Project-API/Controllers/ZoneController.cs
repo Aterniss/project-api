@@ -19,14 +19,14 @@ namespace Project_API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("get-all-zones")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllZones()
         {
             var result = await _zone.GetAll();
             var resultDTO = mapper.Map<List<ZoneDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-zone-by-id/{zoneId}")]
+        [HttpGet("{zoneId}")]
         public async Task<IActionResult> GetById(int zoneId)
         {
             var result = await _zone.GetById(zoneId);
@@ -40,7 +40,7 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpPost("add-new-zone")]
+        [HttpPost()]
         public async Task<IActionResult> AddZone([FromBody]ZoneRequestModel request)
         {
             if(request.ZoneName == "")
@@ -61,7 +61,7 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("update-zone-by-id/{zoneId}")]
+        [HttpPut("{zoneId}")]
         public async Task<IActionResult> UpdateZone([FromBody]ZoneRequestModel request, int zoneId)
         {
             try
@@ -79,7 +79,7 @@ namespace Project_API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpDelete("delete-zone-by-id/{zoneId}")]
+        [HttpDelete("{zoneId}")]
         public async Task<IActionResult> DeleteZone(int zoneId)
         {
             try

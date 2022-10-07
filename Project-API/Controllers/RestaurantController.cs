@@ -18,14 +18,14 @@ namespace Project_API.Controllers
             this._restaurant = restaurant;
             this.mapper = mapper;
         }
-        [HttpGet("get-all-restaurants")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllRestaurants()
         {
             var result = await _restaurant.GetAll();
             var restaurantsDTO = mapper.Map<List<RestaurantDTO>>(result);
             return Ok(restaurantsDTO);
         }
-        [HttpGet("get-restaurant-by-id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _restaurant.GetById(id);
@@ -36,7 +36,7 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<RestaurantDTO>(result);
             return Ok(resultDTO);
         }
-        [HttpPost("add-restaurant")]
+        [HttpPost()]
         public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
             if(newRestaurant.ZoneId == 0)
@@ -60,12 +60,12 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("delete-restaurant-by-id/{restaurantId}")]
-        public async Task<IActionResult> DeleteById(int restaurantId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
             try
             {
-                await _restaurant.DeleteRestaurantById(restaurantId);
+                await _restaurant.DeleteRestaurantById(id);
                 return Ok($"Restaurant is deleted succesfully!");
             }
             catch(Exception ex)
@@ -73,7 +73,7 @@ namespace Project_API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpDelete("delete-restaurant-by-name/{restaurantName}")]
+        [HttpDelete("name/{restaurantName}")]
         public async Task<IActionResult> DeleteByName(string restaurantName)
         {
             try
@@ -86,7 +86,7 @@ namespace Project_API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpPut("update-restaurant/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {
             if (restaurant.ZoneId == 0)

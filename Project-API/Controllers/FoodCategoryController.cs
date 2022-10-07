@@ -20,14 +20,14 @@ namespace Project_API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("get-all-food-categories")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await _foodCategory.GetAllAsync();
             var categoriesDTO = mapper.Map<List<FoodCategoryDTO>>(categories);
             return Ok(categoriesDTO);
         }
-        [HttpGet("get-food-by-name/{name}")]
+        [HttpGet("{name}")]
         public async Task<IActionResult> GetByName(string name)
         {
             var category = await _foodCategory.GetByNameAsync(name);
@@ -39,7 +39,7 @@ namespace Project_API.Controllers
             return Ok(categoryDTO);
 
         }
-        [HttpPost("add-new-category")]
+        [HttpPost()]
         public async Task<IActionResult> AddCategoryAsync([FromBody] FoodCategoryDTO addNewCategory)
         {
             if(addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
@@ -64,7 +64,7 @@ namespace Project_API.Controllers
                 return BadRequest($"Category: \"{addNewCategory.CategoryName}\" already exist!");
             }
         }
-        [HttpDelete("delete-category-by-name/{name}")]
+        [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCategoryAsync(string name)
         {
 
@@ -77,7 +77,7 @@ namespace Project_API.Controllers
 
 
         }
-        [HttpPut("update-category/{name}")]
+        [HttpPut("{name}")]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)
         {
             if (newCategory.CategoryDescription == "")

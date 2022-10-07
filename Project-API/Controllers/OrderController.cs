@@ -18,14 +18,14 @@ namespace Project_API.Controllers
             this._order = order;
             this.mapper = mapper;
         }
-        [HttpGet("get-all-orders")]
+        [HttpGet()]
         public async Task<IActionResult> GetAll()
         {
             var result = await _order.GetAll();
             var resultDTO = mapper.Map<List<OrderDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-order-by-id/{orderId}")]
+        [HttpGet("{orderId}")]
         public async Task<IActionResult> GetById(int orderId)
         {
             var result = await _order.GetById(orderId);
@@ -40,7 +40,7 @@ namespace Project_API.Controllers
             }
         }
 
-        [HttpPost("add-new-order")]
+        [HttpPost()]
         public async Task<IActionResult> AddNewOrder([FromBody] OrderRequestModel orderRequest)
         {
             if(orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
@@ -64,7 +64,7 @@ namespace Project_API.Controllers
             }
 
         }
-        [HttpDelete("delete-order-by-id/{orderId}")]
+        [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             try
@@ -78,7 +78,7 @@ namespace Project_API.Controllers
             }
           
         }
-        [HttpPut("update-order-by-id/{orderId}")]
+        [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder([FromBody]OrderRequestModel request, int orderId)
         {
             if (request.RiderId == 0 || request.IdUser == 0 || request.OrderStatus == "")

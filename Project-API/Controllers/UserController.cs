@@ -20,14 +20,14 @@ namespace Project_API.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet("get-all-users")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllUsers()
         {
             var result = await _user.GetAll();
             var resultDTO = mapper.Map<List<UserDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-user-by-id/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetById(int userId)
         {
             var result = await _user.GetById(userId);
@@ -38,7 +38,7 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<UserDTO>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-user-by-name/{userName}")]
+        [HttpGet("{userName}")]
         public async Task<IActionResult> GetByName(string userName)
         {
             var result = await _user.GetByName(userName);
@@ -49,7 +49,7 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<List<UserDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpPost("add-user")]
+        [HttpPost()]
         public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
         {
             if (request.FullName == "" || request.UserAddress == "")
@@ -67,7 +67,7 @@ namespace Project_API.Controllers
             await _user.AddUser(newUser);
             return Ok("Succesfully added!");
         }
-        [HttpPut("update-user-by-id/{userId}")]
+        [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel request, int userId)
         {
             if (request.FullName == "" || request.UserAddress == "")
@@ -91,7 +91,7 @@ namespace Project_API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpDelete("delete-user-by-id/{userId}")]
+        [HttpDelete("{userId}")]
         public async Task<IActionResult> DeteleUser(int userId)
         {
             try

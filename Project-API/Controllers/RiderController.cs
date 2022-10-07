@@ -18,14 +18,14 @@ namespace Project_API.Controllers
             this._rider = rider;
             this.mapper = mapper;
         }
-        [HttpGet("get-all-riders")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllRiders()
         {
             var result = await _rider.GetAll();
             var resultDTO = mapper.Map<List<RiderDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-rider-by-id/{riderId}")]
+        [HttpGet("{riderId}")]
         public async Task<IActionResult> GetById(int riderId)
         {
             var result = await _rider.GetById(riderId);
@@ -39,7 +39,7 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpPost("add-new-rider")]
+        [HttpPost()]
         public async Task<IActionResult> AddRider([FromBody]RiderRequestModel request)
         {
             if (request.RiderName == "" || request.ZoneId == 0)
@@ -61,7 +61,7 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("delete-rider-by-id/{riderId}")]
+        [HttpDelete("{riderId}")]
         public async Task<IActionResult> DeleteRiderById(int riderId)
         {
             try
@@ -74,7 +74,7 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("update-rider-by-id/{riderId}")]
+        [HttpPut("{riderId}")]
         public async Task<IActionResult> UpdateRiderById([FromBody] RiderRequestModel request, int riderId)
         {
             if (request.RiderName == "" || request.ZoneId == 0)

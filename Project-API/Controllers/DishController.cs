@@ -18,14 +18,14 @@ namespace Project_API.Controllers
             this._dish = dish;
             this.mapper = mapper;
         }
-        [HttpGet("get-all-dishes")]
+        [HttpGet()]
         public async Task<IActionResult> GetAllDishes()
         {
             var result = await _dish.GetAll();
             var resultDTO = mapper.Map<List<DishDTO>>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("get-dish-by-id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _dish.GetDishById(id);
@@ -39,7 +39,7 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpGet("get-dish-by-name/{dishName}")]
+        [HttpGet("/name/{dishName}")]
         public async Task<IActionResult> GetByName(string dishName)
         {
             var result = await _dish.GetDishesByName(dishName);
@@ -53,7 +53,7 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpPut("update-dish-by-id/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDish([FromBody]DishRequestModel request, int id)
         {
             if (request.DishDescription == "" || request.RestaurantId == 0 || request.Price == 0)
@@ -80,7 +80,7 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("delete-by-id/{dishId}")]
+        [HttpDelete("{dishId}")]
         public async Task<IActionResult> DeleteDish(int dishId)
         {
             try
@@ -93,7 +93,7 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("add-new-dish")]
+        [HttpPost()]
         public async Task<IActionResult> AddNewDish([FromBody]DishRequestModel request)
         {
             if(request.DishDescription =="" || request.RestaurantId == 0 || request.Price == 0)
