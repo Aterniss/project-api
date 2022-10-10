@@ -12,7 +12,7 @@ namespace Project_API.Models
 
         public int OrderId { get; set; }
         public string OrderStatus { get; set; } = null!;
-        public byte[] CreatedAt { get; set; } = null!;
+        public DateTime CreatedAt { get; set; }
         public int RiderId { get; set; }
         public int IdUser { get; set; }
 

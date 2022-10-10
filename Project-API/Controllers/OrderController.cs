@@ -39,7 +39,6 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-
         [HttpPost()]
         public async Task<IActionResult> AddNewOrder([FromBody] OrderRequestModel orderRequest)
         {
@@ -52,6 +51,7 @@ namespace Project_API.Controllers
                 var newOrder = new Order()
                 {
                     OrderStatus = orderRequest.OrderStatus,
+                    CreatedAt = DateTime.Now,
                     RiderId = orderRequest.RiderId,
                     IdUser = orderRequest.IdUser
                 };

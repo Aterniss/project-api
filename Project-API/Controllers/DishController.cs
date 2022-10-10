@@ -39,7 +39,7 @@ namespace Project_API.Controllers
                 return Ok(resultDTO);
             }
         }
-        [HttpGet("/name/{dishName}")]
+        [HttpGet("dishes-name/{dishName}")]
         public async Task<IActionResult> GetByName(string dishName)
         {
             var result = await _dish.GetDishesByName(dishName);
