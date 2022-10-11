@@ -26,8 +26,6 @@ namespace Project_API.Repositories
             return result;
         }
 
-
-        // toDo!
         public async Task AddOrderDishes(OrderDish orderDish)
         {
             var checkOrderId = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderDish.OrderId);
@@ -62,6 +60,11 @@ namespace Project_API.Repositories
             else
             {
                 _context.OrderDishes.RemoveRange(result);
+                var order = await _context.Orders.Where(x => x.OrderId == orderId).FirstOrDefaultAsync();
+                if(order != null)
+                {
+                _context.Orders.Remove(order);
+                }
                 await _context.SaveChangesAsync();
             }
         }
