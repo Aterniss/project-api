@@ -8,5 +8,7 @@
         public DateTime? LastUpdate { get; set; }
         public string UserAddress { get; set; } = null!;
         public bool? IsOver18 { get; set; }
+
+      //  public virtual ICollection<OrderDTO> Orders { get; set; }
     }
 }

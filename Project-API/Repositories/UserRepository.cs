@@ -34,7 +34,8 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<User>> GetAll()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .ToListAsync();
         }
 
         public async Task<User> GetById(int id)
@@ -49,7 +50,7 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<User>> GetByName(string fullName)
         {
-            var users = await _context.Users.Where(x => x.FullName == fullName).ToListAsync();
+            var users = await _context.Users.Include(x => x.Orders).Where(x => x.FullName == fullName).ToListAsync();
             if(users.Count == 0)
             {
                 return null;

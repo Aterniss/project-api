@@ -9,8 +9,8 @@ namespace Project_API.Profiles
         public OrderProfile()
         {
             CreateMap<Order, OrderDTO>().ReverseMap();
-            // CreateMap<Rider, RiderDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Rider, RiderDTO>().ReverseMap();
         }
     }
 }

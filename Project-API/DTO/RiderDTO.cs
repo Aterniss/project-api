@@ -6,5 +6,7 @@
         public string RiderName { get; set; } = null!;
         public int ZoneId { get; set; }
 
+        public virtual ZoneDTO Zone { get; set; } = null!;
+
     }
 }

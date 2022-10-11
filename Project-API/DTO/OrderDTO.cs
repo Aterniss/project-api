@@ -7,5 +7,9 @@
         public DateTime CreatedAt { get; set; }
         public int RiderId { get; set; }
         public int IdUser { get; set; }
+
+        public virtual UserDTO UserInfo { get; set; } = null!;
+        public virtual RiderDTO Rider { get; set; } = null!;
+        public virtual ICollection<OrderDishDTO> OrderDishes { get; set; }
     }
 }

@@ -44,12 +44,16 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<Rider>> GetAll()
         {
-            return await _context.Riders.ToListAsync();
+            return await _context.Riders
+                .Include(x => x.Zone)
+                .ToListAsync();
         }
 
         public async Task<Rider> GetById(int id)
         {
-            var existRider = await _context.Riders.FirstOrDefaultAsync(x => x.RiderId == id);
+            var existRider = await _context.Riders
+                .Include(_x => _x.Zone)
+                .FirstOrDefaultAsync(x => x.RiderId == id);
             if(existRider == null)
             {
                 return null;

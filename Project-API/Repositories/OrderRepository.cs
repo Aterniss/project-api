@@ -36,13 +36,21 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<Order>> GetAll()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders
+                .Include(x => x.Rider).ThenInclude(x => x.Zone)
+                .Include(x => x.UserInfo)
+                .Include(x => x.OrderDishes).ThenInclude(x => x.Dish)
+                .ToListAsync();
             
         }
 
         public async Task<Order> GetById(int orderId)
         {
-            var existOrder = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
+            var existOrder = await _context.Orders
+                .Include(x => x.Rider).ThenInclude(x => x.Zone)
+                .Include(x => x.UserInfo)
+                .Include(x => x.OrderDishes).ThenInclude(x => x.Dish)
+                .FirstOrDefaultAsync(x => x.OrderId == orderId);
             if(existOrder == null)
             {
                 return null;

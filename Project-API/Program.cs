@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Project_API.Models;
 using Project_API.Repositories;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,9 @@ builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
 builder.Services.AddScoped<IRiderRepository, RiderRepository>();
 builder.Services.AddScoped<IOrderDishRepository, OrderDishRepository>();
 
-
+//added extra
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 var app = builder.Build();

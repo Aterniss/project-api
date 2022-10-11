@@ -9,6 +9,8 @@ namespace Project_API.Profiles
         public OrderDishProfile()
         {
             CreateMap<OrderDish, OrderDishDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Dish, DishDTO>().ReverseMap();
           
         }
     }

@@ -103,7 +103,7 @@ namespace Project_API.Models
 
                 entity.Property(e => e.RiderId).HasColumnName("rider_id");
 
-                entity.HasOne(d => d.IdUserNavigation)
+                entity.HasOne(d => d.UserInfo)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)

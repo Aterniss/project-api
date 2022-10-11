@@ -73,19 +73,6 @@ namespace Project_API.Controllers
                 return NotFound(ex.Message);
             }
         }
-        [HttpDelete("name/{restaurantName}")]
-        public async Task<IActionResult> DeleteByName(string restaurantName)
-        {
-            try
-            {
-                await _restaurant.DeleteRestaurantByName(restaurantName);
-                return Ok($"Restaurant is deleted succesfully!");
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {

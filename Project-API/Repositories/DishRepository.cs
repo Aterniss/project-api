@@ -38,12 +38,14 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<Dish>> GetAll()
         {
-            return await _context.Dishes.IgnoreAutoIncludes().ToListAsync();
+            return await _context.Dishes
+                .ToListAsync();
         }
 
         public async Task<Dish> GetDishById(int id)
         {
-            var result = await _context.Dishes.FirstOrDefaultAsync(x => x.DishId == id);
+            var result = await _context.Dishes
+                .FirstOrDefaultAsync(x => x.DishId == id);
             if(result == null)
             {
                 return null;

@@ -9,6 +9,10 @@
         public string? RestaurantAddress { get; set; }
         public int ZoneId { get; set; }
 
+        public virtual FoodCategoryDTO? CategoryNameNavigation { get; set; }
+        public virtual ZoneDTO Zone { get; set; } = null!;
+        public virtual ICollection<DishDTO> Dishes { get; set; }
+
 
     }
 }

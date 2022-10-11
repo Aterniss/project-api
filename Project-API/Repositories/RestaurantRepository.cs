@@ -34,28 +34,22 @@ namespace Project_API.Repositories
             
         }
 
-        public async Task DeleteRestaurantByName(string restaurantName)
-        {
-            var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantName == restaurantName);
-            if (result != null)
-            {
-                _dbContext.Restaurants.Remove(result);
-                await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                throw new Exception($"Restaurant with name: \"{restaurantName}\" does not exist!");
-            }
-        }
-
         public async Task<IEnumerable<Restaurant>> GetAll()
         {
-            return await _dbContext.Restaurants.IgnoreAutoIncludes().ToListAsync();
+            return await _dbContext.Restaurants
+                .Include(x => x.Zone)
+                .Include(x => x.Dishes)
+                .Include(x => x.CategoryNameNavigation)
+                .ToListAsync();
         }
 
         public async Task<Restaurant> GetById(int id)
         {
-            var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == id);
+            var result = await _dbContext.Restaurants
+                .Include(x => x.Zone)
+                .Include(x => x.Dishes)
+                .Include(x => x.CategoryNameNavigation)
+                .FirstOrDefaultAsync(x => x.RestaurantId == id);
             if(result == null)
             {
                 return null;

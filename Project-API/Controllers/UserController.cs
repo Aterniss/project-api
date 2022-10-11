@@ -38,7 +38,7 @@ namespace Project_API.Controllers
             var resultDTO = mapper.Map<UserDTO>(result);
             return Ok(resultDTO);
         }
-        [HttpGet("{userName}")]
+        [HttpGet("get-by-name/{userName}")]
         public async Task<IActionResult> GetByName(string userName)
         {
             var result = await _user.GetByName(userName);
