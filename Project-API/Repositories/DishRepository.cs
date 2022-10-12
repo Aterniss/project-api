@@ -77,7 +77,7 @@ namespace Project_API.Repositories
             {
                 throw new Exception($"The dish with ID: \"{id}\" does not exist!");
             }
-            else if (existingDish != null)
+            else if(existingDish != null)
             {
                 var checkRestaurantId = await _context.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == dish.RestaurantId);
                 if(checkRestaurantId == null)
