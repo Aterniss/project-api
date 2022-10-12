@@ -18,8 +18,11 @@ namespace Project_API.Repositories
             {
                 throw new Exception($"The given restaurant ID: \"{dish.RestaurantId}\" does not exist!");
             }
+            else
+            {
             await _context.Dishes.AddAsync(dish);
             await _context.SaveChangesAsync();
+            }
         }
 
         public async Task DeleteDishById(int id)
@@ -31,7 +34,9 @@ namespace Project_API.Repositories
             }
             else
             {
-                _context.Remove(existingDish);
+                var orderDishes = await _context.OrderDishes.Where(x => x.DishId == id).ToListAsync();
+              //  _context.Remove(existingDish);
+                _context.RemoveRange(existingDish, orderDishes);
                 await _context.SaveChangesAsync();
             }
         }
