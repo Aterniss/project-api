@@ -35,8 +35,8 @@ namespace Project_API.Repositories
             else
             {
                 var orderDishes = await _context.OrderDishes.Where(x => x.DishId == id).ToListAsync();
-              //  _context.Remove(existingDish);
-                _context.RemoveRange(existingDish, orderDishes);
+                _context.Remove(existingDish);
+                _context.RemoveRange(orderDishes);
                 await _context.SaveChangesAsync();
             }
         }

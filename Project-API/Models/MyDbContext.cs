@@ -99,7 +99,7 @@ namespace Project_API.Models
 
                 entity.Property(e => e.RiderId).HasColumnName("rider_id");
 
-                entity.HasOne(d => d.UserInfo)
+                entity.HasOne(d => d.IdUserNavigation)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.IdUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -125,13 +125,11 @@ namespace Project_API.Models
                 entity.HasOne(d => d.Dish)
                     .WithMany(p => p.OrderDishes)
                     .HasForeignKey(d => d.DishId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_dishes_dishes");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDishes)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_order_dishes_orders");
             });
 

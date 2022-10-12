@@ -16,7 +16,7 @@ namespace Project_API.Models
         public int RiderId { get; set; }
         public int IdUser { get; set; }
 
-        public virtual User UserInfo { get; set; } = null!;
+        public virtual User IdUserNavigation { get; set; } = null!;
         public virtual Rider Rider { get; set; } = null!;
         public virtual ICollection<OrderDish> OrderDishes { get; set; }
     }

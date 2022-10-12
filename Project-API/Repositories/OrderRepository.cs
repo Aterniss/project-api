@@ -29,7 +29,9 @@ namespace Project_API.Repositories
             }
             else
             {
+                var orderDish = await _context.OrderDishes.Where(x => x.OrderId == orderId).ToListAsync();
                 _context.Orders.Remove(existOrder);
+                _context.OrderDishes.RemoveRange(orderDish);
                 await _context.SaveChangesAsync();
             }
         }
@@ -38,7 +40,7 @@ namespace Project_API.Repositories
         {
             return await _context.Orders
                 .Include(x => x.Rider).ThenInclude(x => x.Zone)
-                .Include(x => x.UserInfo)
+                .Include(x => x.IdUserNavigation)
                 .Include(x => x.OrderDishes).ThenInclude(x => x.Dish)
                 .ToListAsync();
             
@@ -48,7 +50,7 @@ namespace Project_API.Repositories
         {
             var existOrder = await _context.Orders
                 .Include(x => x.Rider).ThenInclude(x => x.Zone)
-                .Include(x => x.UserInfo)
+                .Include(x => x.IdUserNavigation)
                 .Include(x => x.OrderDishes).ThenInclude(x => x.Dish)
                 .FirstOrDefaultAsync(x => x.OrderId == orderId);
             if(existOrder == null)
