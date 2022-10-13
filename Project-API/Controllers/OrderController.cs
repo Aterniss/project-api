@@ -48,14 +48,7 @@ namespace Project_API.Controllers
             }
             try
             {
-                var newOrder = new Order()
-                {
-                    OrderStatus = orderRequest.OrderStatus,
-                    CreatedAt = DateTime.Now,
-                    RiderId = orderRequest.RiderId,
-                    IdUser = orderRequest.IdUser
-                };
-                await _order.AddNewOrder(newOrder);
+                await _order.AddNewOrder(orderRequest);
                 return Ok("Succesfully added!");
             }
             catch(Exception ex)

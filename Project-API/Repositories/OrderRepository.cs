@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Project_API.DTO.RequestModels;
 using Project_API.Models;
 
 namespace Project_API.Repositories
@@ -11,11 +12,39 @@ namespace Project_API.Repositories
             this._context = context;
         }
 
-        public async Task AddNewOrder(Order order)
+        public async Task AddNewOrder(OrderRequestModel order)
         {
+ 
             await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
-            _context.Orders.Add(order);
+            var newOrder = new Order()
+            {
+                OrderStatus = order.OrderStatus,
+                CreatedAt = DateTime.Now,
+                RiderId = order.RiderId,
+                IdUser = order.IdUser
+            };
+            _context.Orders.Add(newOrder);
             await _context.SaveChangesAsync();
+
+            var dishesList = order.Dishes;
+            try
+            {
+                foreach (var dish in dishesList)
+                {
+                    var orderDishes = new OrderDish()
+                    {
+                        OrderId = newOrder.OrderId,
+                        DishId = dish
+                    };
+                    _context.OrderDishes.Add(orderDishes);
+                }
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception($"The dishes does not exist!");
+            }
+
             
 
         }
