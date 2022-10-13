@@ -183,6 +183,18 @@ namespace API_Tests
                     RiderId = 4,
                     RiderName = "rider name 4",
                     ZoneId = 3
+                },
+                new Rider()
+                {
+                    RiderId = 5,
+                    RiderName = "delete me",
+                    ZoneId = 3
+                },
+                new Rider()
+                {
+                    RiderId = 6,
+                    RiderName = "update me!",
+                    ZoneId = 2
                 }
             };
             _context.Riders.AddRange(riders);

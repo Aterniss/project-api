@@ -25,7 +25,6 @@ namespace Project_API.Repositories
                 throw new Exception($"Zone with ID: \"{rider.ZoneId}\" does not exist!");
             }
 
-            await _context.Riders.AddAsync(rider);
         }
 
         public async Task DeleteRider(int id)
