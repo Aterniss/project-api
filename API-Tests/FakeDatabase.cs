@@ -144,6 +144,16 @@ namespace API_Tests
                 {
                     ZoneId = 4,
                     ZoneName = "Already exist"
+                },
+                new Zone()
+                {
+                    ZoneId = 5,
+                    ZoneName = "Delete"
+                },
+                new Zone()
+                {
+                    ZoneId = 6,
+                    ZoneName = "Update test"
                 }
             };
             _context.Zones.AddRange(zones);

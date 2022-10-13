@@ -69,6 +69,7 @@ namespace Project_API.Repositories
             if(existZone != null && existZoneName == null)
             {
                 existZone.ZoneName = zone.ZoneName;
+                await _context.SaveChangesAsync();
             }
             else if(existZone != null && existZoneName != null)
             {
