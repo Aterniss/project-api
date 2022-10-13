@@ -139,6 +139,11 @@ namespace API_Tests
                 {
                     ZoneId = 3,
                     ZoneName = "zone name 3"
+                },
+                new Zone()
+                {
+                    ZoneId = 4,
+                    ZoneName = "Already exist"
                 }
             };
             _context.Zones.AddRange(zones);
