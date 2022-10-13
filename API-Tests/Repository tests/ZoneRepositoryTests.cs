@@ -44,12 +44,13 @@ namespace API_Tests.Repository_tests
             Assert.DoesNotThrowAsync(() => result);
         }
         [Test, Order(3)]
-        public void DeleteZone_IfZoneExist_ThrowException()
+        public void DeleteZone_IfZoneExistButIsInRelation_ThrowException()
         {
             var id = 1;
             var result = _zone.DeleteZone(id);
-            Assert.DoesNotThrowAsync(() => result);
+            Assert.That(() => result, Throws.Exception.With.Message.EqualTo($"You can not delete this Zone, because some restaurant has this zone asigned!"));
         }
+
 
 
 
