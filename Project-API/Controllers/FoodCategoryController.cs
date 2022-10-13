@@ -67,15 +67,15 @@ namespace Project_API.Controllers
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCategoryAsync(string name)
         {
-
-            var response = await _foodCategory.DeleteAsync(name);
-            if (response == null)
+            try
             {
-                return NotFound($"Category: \"{name}\" is not founded!");
+                await _foodCategory.DeleteAsync(name);
+                return Ok($"Category: \"{name}\" has been deleted!");
             }
-            return Ok($"Category: \"{name}\" has been deleted!");
-
-
+            catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
         [HttpPut("{name}")]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)

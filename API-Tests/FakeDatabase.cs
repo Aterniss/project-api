@@ -105,6 +105,21 @@ namespace API_Tests
                     CategoryName = "category name 3",
                     CategoryDescription = "description 3"
                 },
+                 new FoodCategory()
+                {
+                    CategoryName = "to delete",
+                    CategoryDescription = "description 4"
+                },
+                 new FoodCategory()
+                {
+                    CategoryName = "already exist",
+                    CategoryDescription = "description 4"
+                },
+                 new FoodCategory()
+                {
+                    CategoryName = "update",
+                    CategoryDescription = "description 4"
+                },
             };
             _context.FoodCategories.AddRange(foodCategories);
 

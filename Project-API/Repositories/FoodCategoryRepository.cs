@@ -19,16 +19,20 @@ namespace Project_API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<FoodCategory> DeleteAsync(string name)
+        public async Task DeleteAsync(string name)
         {
             var response = await _context.FoodCategories.FirstOrDefaultAsync(x => x.CategoryName == name);
             if (response == null)
             {
-                return null;
+                throw new Exception($"Category: \"{name}\" is not founded!");
             }
-            _context.FoodCategories.Remove(response);
-            await _context.SaveChangesAsync();
-            return response;
+            else
+            {
+                _context.FoodCategories.Remove(response);
+                await _context.SaveChangesAsync();
+            }
+
+           
         }
 
         public async Task<IEnumerable<FoodCategory>> GetAllAsync()

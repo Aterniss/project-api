@@ -7,7 +7,7 @@ namespace Project_API.Repositories
         Task<IEnumerable<FoodCategory>> GetAllAsync();
         Task<FoodCategory> GetByNameAsync(string categoryName);
         Task AddAsync(FoodCategory category);
-        Task<FoodCategory> DeleteAsync(string name);
+        Task DeleteAsync(string name);
         Task<FoodCategory> UpdateAsync(string name, FoodCategory category);
 
     }
