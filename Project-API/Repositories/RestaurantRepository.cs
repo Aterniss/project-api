@@ -95,9 +95,6 @@ namespace Project_API.Repositories
 
         }
 
-        public Task<Restaurant> GetByName(string restaurantName)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 }

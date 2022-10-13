@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Project_API.Models;
 using Project_API.Repositories;
 
-namespace API_Tests
+namespace API_Tests.Repository_tests
 {
     public class DishRepositoryTests : FakeDatabase
     {
@@ -26,10 +26,11 @@ namespace API_Tests
         }
 
         [Test, Order(1)]
-        public async Task GetAll_ReturnSearchResult()
+        public void GetAll_ReturnSearchResult()
         {
-            var result = await _dishRepository.GetAll();
+            var result = _dishRepository.GetAll();
             Assert.That(result, Is.Not.Null);
+            Assert.DoesNotThrowAsync(() => result);
         }
         [Test, Order(2)]
         public async Task GetDishById_WhenIdExist_ReturnCorrectObject()
