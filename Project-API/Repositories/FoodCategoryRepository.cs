@@ -28,6 +28,11 @@ namespace Project_API.Repositories
             }
             else
             {
+                var restaurant = await _context.Restaurants.Where(x => x.CategoryName == name).ToListAsync();
+                if(restaurant.Any())
+                {
+                    throw new Exception($"You can not delete this \"Category name\", because some restaurant has this category asigned!");
+                }
                 _context.FoodCategories.Remove(response);
                 await _context.SaveChangesAsync();
             }

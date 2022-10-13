@@ -35,22 +35,15 @@ namespace Project_API.Repositories
             else
             {
                 var restaurant = await _context.Restaurants.Where(x => x.ZoneId == id).ToListAsync();
-                var updated = new List<Restaurant>();
-                foreach(var item in restaurant)
+                if (restaurant.Any())
                 {
-                    var updatedRestaurant = new Restaurant()
-                    {
-                        RestaurantId = item.RestaurantId,
-                        RestaurantName = item.RestaurantName,
-                        CategoryName = item.CategoryName,
-                        RestaurantAddress = item.RestaurantAddress,
-                        ZoneId = 0
-                    };
-                    updated.Add(updatedRestaurant);
+                    throw new Exception($"You can not delete this Zone, because some restaurant has this zone asigned!");
                 }
-                _context.Restaurants.UpdateRange(updated);
-                _context.Zones.Remove(existZone);
-                await _context.SaveChangesAsync();
+                else
+                {
+                    _context.Zones.Remove(existZone);
+                    await _context.SaveChangesAsync();
+                }
             }
         }
 
