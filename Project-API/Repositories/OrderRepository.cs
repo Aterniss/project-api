@@ -14,21 +14,32 @@ namespace Project_API.Repositories
 
         public async Task AddNewOrder(OrderRequestModel order)
         {
- 
-            await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
-            var newOrder = new Order()
-            {
-                OrderStatus = order.OrderStatus,
-                CreatedAt = DateTime.Now,
-                RiderId = order.RiderId,
-                IdUser = order.IdUser
-            };
-            _context.Orders.Add(newOrder);
-            await _context.SaveChangesAsync();
-
+            var checkDishes = await _context.Dishes.Select(x => x.DishId).ToListAsync();
             var dishesList = order.Dishes;
-            try
+            bool flag = true;
+            foreach(var item in dishesList)
             {
+                if (!checkDishes.Contains(item))
+                {
+                    flag = false;
+                }
+            }
+            if(flag == false)
+            {
+                throw new Exception($"The dishes does not exist!");
+            }
+            else
+            {
+                await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
+                var newOrder = new Order()
+                {
+                    OrderStatus = order.OrderStatus,
+                    CreatedAt = DateTime.Now,
+                    RiderId = order.RiderId,
+                    IdUser = order.IdUser
+                };
+                _context.Orders.Add(newOrder);
+                await _context.SaveChangesAsync();
                 foreach (var dish in dishesList)
                 {
                     var orderDishes = new OrderDish()
@@ -40,10 +51,39 @@ namespace Project_API.Repositories
                 }
                 await _context.SaveChangesAsync();
             }
-            catch
-            {
-                throw new Exception($"The dishes does not exist!");
-            }
+
+
+
+
+            //await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
+            //var newOrder = new Order()
+            //{
+            //    OrderStatus = order.OrderStatus,
+            //    CreatedAt = DateTime.Now,
+            //    RiderId = order.RiderId,
+            //    IdUser = order.IdUser
+            //};
+            //_context.Orders.Add(newOrder);
+            //await _context.SaveChangesAsync();
+
+            
+            //try
+            //{
+            //    foreach (var dish in dishesList)
+            //    {
+            //        var orderDishes = new OrderDish()
+            //        {
+            //            OrderId = newOrder.OrderId,
+            //            DishId = dish
+            //        };
+            //        _context.OrderDishes.Add(orderDishes);
+            //    }
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch
+            //{
+            //    throw new Exception($"The dishes does not exist!");
+            //}
 
             
 
