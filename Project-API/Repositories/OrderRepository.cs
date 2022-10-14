@@ -95,8 +95,8 @@ namespace Project_API.Repositories
 
         public async Task UpdateOrder(Order order, int orderId)
         {
-            var existOrder = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId==orderId);
-            if( existOrder == null)
+            var existOrder = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == orderId);
+            if (existOrder == null)
             {
                 throw new Exception($"Order with ID: \"{orderId}\" does not exist!");
             }

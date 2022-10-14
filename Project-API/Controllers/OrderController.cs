@@ -72,7 +72,7 @@ namespace Project_API.Controllers
           
         }
         [HttpPut("{orderId}")]
-        public async Task<IActionResult> UpdateOrder([FromBody]OrderRequestModel request, int orderId)
+        public async Task<IActionResult> UpdateOrder([FromBody]OrderUpdateRequest request, int orderId)
         {
             if (request.RiderId == 0 || request.IdUser == 0 || request.OrderStatus == "")
             {
