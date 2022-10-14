@@ -51,42 +51,6 @@ namespace Project_API.Repositories
                 }
                 await _context.SaveChangesAsync();
             }
-
-
-
-
-            //await CheckUserIdAndRiderId(order.IdUser, order.RiderId);
-            //var newOrder = new Order()
-            //{
-            //    OrderStatus = order.OrderStatus,
-            //    CreatedAt = DateTime.Now,
-            //    RiderId = order.RiderId,
-            //    IdUser = order.IdUser
-            //};
-            //_context.Orders.Add(newOrder);
-            //await _context.SaveChangesAsync();
-
-            
-            //try
-            //{
-            //    foreach (var dish in dishesList)
-            //    {
-            //        var orderDishes = new OrderDish()
-            //        {
-            //            OrderId = newOrder.OrderId,
-            //            DishId = dish
-            //        };
-            //        _context.OrderDishes.Add(orderDishes);
-            //    }
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch
-            //{
-            //    throw new Exception($"The dishes does not exist!");
-            //}
-
-            
-
         }
 
         public async Task DeleteOrder(int orderId)
