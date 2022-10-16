@@ -6,11 +6,6 @@ namespace API_Tests.Repository_tests
 {
     public class DishRepositoryTests : FakeDatabase
     {
-        //private static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
-        //    .UseInMemoryDatabase(databaseName: "API-Tests")
-        //    .Options;
-
-       // MyDbContext _context;
 
         DishRepository _dishRepository;
 

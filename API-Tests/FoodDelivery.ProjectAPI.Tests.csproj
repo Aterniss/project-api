@@ -19,11 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controller tests\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Project-API\Project-API.csproj" />
+    <ProjectReference Include="..\Project-API\FoodDelivery.ProjectAPI.csproj" />
   </ItemGroup>
 
 </Project>
