@@ -24,10 +24,18 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllCategories()
         {
-            _logger.LogInformation(returnLogMessage("FoodCategory","GetAllCategories"));
-            var categories = await _foodCategory.GetAllAsync();
-            var categoriesDTO = mapper.Map<List<FoodCategoryDTO>>(categories);
-            return Ok(categoriesDTO);
+            try
+            {
+                _logger.LogInformation(returnLogMessage("FoodCategory", "GetAllCategories"));
+                var categories = await _foodCategory.GetAllAsync();
+                var categoriesDTO = mapper.Map<List<FoodCategoryDTO>>(categories);
+                return Ok(categoriesDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the categories!");
+            }
         }
         [HttpGet("{name}")]
         public async Task<IActionResult> GetByName(string name)
@@ -37,7 +45,9 @@ namespace Project_API.Controllers
             var categoryDTO = mapper.Map<FoodCategoryDTO>(category);
             if (categoryDTO == null)
             {
-                return NotFound($"Category with name: \"{name}\" is not founded!");
+                var msg = $"Category with name: \"{name}\" is not founded!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             return Ok(categoryDTO);
 
@@ -48,7 +58,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("FoodCategory", "AddCategoryAsync"));
             if (addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
             {
-                return BadRequest("The given fields cannot be empty!");
+                var msg = "The given fields cannot be empty!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
 
             try
@@ -65,7 +77,9 @@ namespace Project_API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest($"Category: \"{addNewCategory.CategoryName}\" already exist!");
+                var msg = $"Category: \"{addNewCategory.CategoryName}\" already exist!";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
         }
         [HttpDelete("{name}")]
@@ -79,6 +93,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound(ex.Message);
             }
         }
@@ -88,7 +103,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("FoodCategory", "UpdateCategoryAsync"));
             if (newCategory.CategoryDescription == "")
             {
-                return BadRequest("The given field cannot be empty!");
+                var msg = "The given field cannot be empty!";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
 
             var category = new FoodCategory()
@@ -99,7 +116,9 @@ namespace Project_API.Controllers
             var response = await _foodCategory.UpdateAsync(name, category);
             if (response == null)
             {
-                return NotFound($"Category: \"{name}\" was not founded!");
+                var msg = $"Category: \"{name}\" was not founded!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             return Ok($"Category: \"{name}\" has been updated");
         }

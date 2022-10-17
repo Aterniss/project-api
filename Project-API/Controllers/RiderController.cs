@@ -23,10 +23,18 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllRiders()
         {
-            _logger.LogInformation(returnLogMessage("Rider", "GetAllRiders"));
-            var result = await _rider.GetAll();
-            var resultDTO = mapper.Map<List<RiderDTO>>(result);
-            return Ok(resultDTO);
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Rider", "GetAllRiders"));
+                var result = await _rider.GetAll();
+                var resultDTO = mapper.Map<List<RiderDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the riders!");
+            }
         }
         [HttpGet("{riderId}")]
         public async Task<IActionResult> GetById(int riderId)
@@ -35,7 +43,9 @@ namespace Project_API.Controllers
             var result = await _rider.GetById(riderId);
             if(result == null)
             {
-                return NotFound($"Rider with ID: \"{riderId}\" has not been found!");
+                var msg = $"Rider with ID: \"{riderId}\" has not been found!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             else
             {
@@ -63,6 +73,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -77,6 +88,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogWarning(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -86,7 +98,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Rider", "UpdateRiderById"));
             if (request.RiderName == "" || request.ZoneId == 0)
             {
-                return BadRequest("The given fields are required!");
+                var msg = "The given fields are required!";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
             try
             {
@@ -100,6 +114,7 @@ namespace Project_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

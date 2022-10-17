@@ -24,10 +24,20 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllUsers()
         {
-            _logger.LogInformation(returnLogMessage("User", "GetAllUsers"));
-            var result = await _user.GetAll();
-            var resultDTO = mapper.Map<List<UserDTO>>(result);
-            return Ok(resultDTO);
+            try
+            {
+
+
+                _logger.LogInformation(returnLogMessage("User", "GetAllUsers"));
+                var result = await _user.GetAll();
+                var resultDTO = mapper.Map<List<UserDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the users!");
+            }
         }
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetById(int userId)
@@ -36,7 +46,9 @@ namespace Project_API.Controllers
             var result = await _user.GetById(userId);
             if(result == null)
             {
-                return NotFound($"User with ID: \"{userId}\" has not been found!");
+                var msg = $"User with ID: \"{userId}\" has not been found!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             var resultDTO = mapper.Map<UserDTO>(result);
             return Ok(resultDTO);
@@ -48,7 +60,9 @@ namespace Project_API.Controllers
             var result = await _user.GetByName(userName);
             if(result == null)
             {
-                return BadRequest($"User with fullname: \"{userName}\" has not been found!");
+                var msg = $"User with fullname: \"{userName}\" has not been found!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             var resultDTO = mapper.Map<List<UserDTO>>(result);
             return Ok(resultDTO);
@@ -56,21 +70,29 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
         {
-            _logger.LogInformation(returnLogMessage("Rider", "AddUser"));
-            if (request.FullName == "" || request.UserAddress == "")
+            try
             {
-                return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+                _logger.LogInformation(returnLogMessage("Rider", "AddUser"));
+                if (request.FullName == "" || request.UserAddress == "")
+                {
+                    return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+                }
+                var newUser = new User()
+                {
+                    FullName = request.FullName,
+                    CreatedAt = DateTime.Now,
+                    LastUpdate = DateTime.Now,
+                    UserAddress = request.UserAddress,
+                    IsOver18 = request.IsOver18
+                };
+                await _user.AddUser(newUser);
+                return Ok("Succesfully added!");
             }
-            var newUser = new User()
+            catch(Exception ex)
             {
-                FullName = request.FullName,
-                CreatedAt = DateTime.Now,
-                LastUpdate = DateTime.Now,
-                UserAddress = request.UserAddress,
-                IsOver18 = request.IsOver18
-            };
-            await _user.AddUser(newUser);
-            return Ok("Succesfully added!");
+                _logger.LogError(ex.Message);
+                return BadRequest("sorry you could not add new user!");
+            }
         }
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel request, int userId)
@@ -94,6 +116,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound(ex.Message);
             }
         }
@@ -108,6 +131,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound(ex.Message);
             }
         }

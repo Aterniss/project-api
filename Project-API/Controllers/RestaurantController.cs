@@ -23,10 +23,18 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllRestaurants()
         {
-            _logger.LogInformation(returnLogMessage("Restaurant", "GetAllRestaurants"));
-            var result = await _restaurant.GetAll();
-            var restaurantsDTO = mapper.Map<List<RestaurantDTO>>(result);
-            return Ok(restaurantsDTO);
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Restaurant", "GetAllRestaurants"));
+                var result = await _restaurant.GetAll();
+                var restaurantsDTO = mapper.Map<List<RestaurantDTO>>(result);
+                return Ok(restaurantsDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the restaurants!");
+            }
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -35,6 +43,7 @@ namespace Project_API.Controllers
             var result = await _restaurant.GetById(id);
             if(result == null)
             {
+                _logger.LogWarning("not found!");
                 return NotFound($"Restaurant with ID: \"{id}\" was not founded!");
             }
             var resultDTO = mapper.Map<RestaurantDTO>(result);
@@ -46,7 +55,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Restaurant", "AddRestaurant"));
             if (newRestaurant.ZoneId == 0)
             {
-                return BadRequest("The given field: \"zone id\" is required!");
+                var msg = "The given field: \"zone id\" is required!";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
             try
             { 
@@ -62,6 +73,7 @@ namespace Project_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -76,6 +88,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogWarning(ex.Message);
                 return NotFound(ex.Message);
             }
         }
@@ -94,6 +107,7 @@ namespace Project_API.Controllers
                 return Ok("The restaurant has been updated!");
             }catch(Exception ex)
             {
+                _logger.LogWarning(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

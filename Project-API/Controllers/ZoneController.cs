@@ -24,10 +24,18 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllZones()
         {
-            _logger.LogInformation(returnLogMessage("Zone", "GetAllZones"));
-            var result = await _zone.GetAll();
-            var resultDTO = mapper.Map<List<ZoneDTO>>(result);
-            return Ok(resultDTO);
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Zone", "GetAllZones"));
+                var result = await _zone.GetAll();
+                var resultDTO = mapper.Map<List<ZoneDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the zones!");
+            }
         }
         [HttpGet("{zoneId}")]
         public async Task<IActionResult> GetById(int zoneId)
@@ -36,7 +44,9 @@ namespace Project_API.Controllers
             var result = await _zone.GetById(zoneId);
             if(result == null)
             {
-                return NotFound($"Zone with ID: \"{zoneId}\" has not been found!");
+                var msg = $"Zone with ID: \"{zoneId}\" has not been found!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             else
             {
@@ -50,7 +60,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Zone", "AddZone"));
             if (request.ZoneName == "")
             {
-                return BadRequest("This field is required~!");
+                var msg = "This field is required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {
@@ -63,6 +75,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -82,6 +95,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound(ex.Message);
             }
         }
@@ -96,6 +110,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

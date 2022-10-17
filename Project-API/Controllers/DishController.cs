@@ -30,8 +30,9 @@ namespace Project_API.Controllers
                 var resultDTO = mapper.Map<List<DishDTO>>(result);
                 return Ok(resultDTO);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest("Sorry, we could not load the dishes!");
             }
         }
@@ -42,7 +43,9 @@ namespace Project_API.Controllers
             var result = await _dish.GetDishById(id);
             if(result == null)
             {
-                return NotFound($"The dish was not found!");
+                var msg = $"The dish with id: {id} was not found!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             else
             {
@@ -57,7 +60,9 @@ namespace Project_API.Controllers
             var result = await _dish.GetDishesByName(dishName);
             if(result == null)
             {
-                return NotFound($"The dish: \"{dishName}\" was not found!");
+                var msg = $"The dish: \"{dishName}\" was not found!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             else
             {
@@ -90,6 +95,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -104,6 +110,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -125,6 +132,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger?.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
 

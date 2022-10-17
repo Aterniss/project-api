@@ -23,10 +23,19 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAll()
         {
-            _logger.LogInformation(returnLogMessage("Order", "GetAll"));
-            var result = await _order.GetAll();
-            var resultDTO = mapper.Map<List<OrderDTO>>(result);
-            return Ok(resultDTO);
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Order", "GetAll"));
+                var result = await _order.GetAll();
+                var resultDTO = mapper.Map<List<OrderDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the orders!");
+            }
+
         }
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetById(int orderId)
@@ -35,7 +44,9 @@ namespace Project_API.Controllers
             var result = await _order.GetById(orderId);
             if(result == null)
             {
-                return NotFound($"Order with ID: \"{orderId}\" has not been found.");
+                var msg = $"Order with ID: \"{orderId}\" has not been found.";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             else
             {
@@ -49,7 +60,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Order", "AddNewOrder"));
             if (orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
             {
-                return BadRequest("The given fields are required!");
+                var msg = "The given fields are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {
@@ -58,6 +71,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -73,6 +87,7 @@ namespace Project_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return NotFound(ex.Message);
             }
           
@@ -98,6 +113,7 @@ namespace Project_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
