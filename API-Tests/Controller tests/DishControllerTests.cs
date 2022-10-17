@@ -99,7 +99,7 @@ namespace API_Tests.Controller_tests
         }
         //test when dish ID does not exist!
         [Test, Order(7)]
-        public void HTTPPUT_UpdateDish_WhenIdIsWrong_ReturnNotFound()
+        public void HTTPPUT_UpdateDish_WhenIdIsWrong_ReturnBadRequest()
         {
             var request = new DishRequestModel()
             {
@@ -109,10 +109,10 @@ namespace API_Tests.Controller_tests
                 Require18 = false,
                 RestaurantId = 1
             };
-            int id = 99999;
+            int id = 921;
 
             Task<IActionResult> result = _dishController.UpdateDish(request, id);
-            Assert.That(result.Result, Is.TypeOf<NotFoundObjectResult>());
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
         }
         [Test, Order(8)]
         public void HTTPPUT_UpdateDish_WhenEverythingIsCorrect_ReturnOk()
@@ -129,10 +129,68 @@ namespace API_Tests.Controller_tests
             
             Task<IActionResult> result = _dishController.UpdateDish(request, id);
             Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
-           //Assert.DoesNotThrowAsync(() => result);
+            Assert.DoesNotThrowAsync(() => result);
         }
-
-
+        [Test, Order(9)]
+        public void HTTPDELETE_DeleteDish_WhenIdDoesNotExist_ReturnBadRequest()
+        {
+            int id = 999;
+            Task<IActionResult> result = _dishController.DeleteDish(id);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+            Assert.DoesNotThrowAsync(() => result);
+        }
+        [Test, Order(10)]
+        public void HTTPDELETE_DeleteDish_WhenIdExist_ReturnOk()
+        {
+            int id = 3;
+            Task<IActionResult> result = _dishController.DeleteDish(id);
+            Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
+            Assert.DoesNotThrowAsync(() => result);
+        }
+        [Test, Order(11)]
+        public void HTTPPOST_AddNewDish_WhenFieldsAreEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "",
+                DishDescription = "",
+                Price = 0,
+                Require18 = false,
+                RestaurantId = 0
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(12)]
+        public void HTTPPOST_AddNewDish_WhenIsException_ReturnNotFound()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "ad",
+                DishDescription = "asda",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 99
+            };
+            // I need to know, why when I use AutoMapper I can not convert DTO with models
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<NotFoundObjectResult>());
+        }
+        [Test, Order(13)]
+        public void HTTPPOST_AddNewDish_WithoutException_ReturnOk()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "new dish name",
+                DishDescription = "sample text",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
+            Assert.DoesNotThrowAsync(() => result);
+        }
 
 
 

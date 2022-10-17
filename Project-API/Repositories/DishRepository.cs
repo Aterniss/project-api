@@ -79,10 +79,11 @@ namespace Project_API.Repositories
             }
             else
             {
+
                 var checkRestaurantId = await _context.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == dish.RestaurantId);
                 if(checkRestaurantId == null)
                 {
-                    throw new ArgumentException($"The given restaurant ID: \"{dish.RestaurantId}\" does not exist!");
+                    throw new AggregateException($"The given restaurant ID: \"{dish.RestaurantId}\" does not exist!");
                 }
                 else if(checkRestaurantId != null)
                 {

@@ -80,26 +80,20 @@ namespace Project_API.Controllers
             }
             try
             {
-                var dishDTO = new DishDTO()
+                var dish = new Dish()
                 {
-                    DishId = id,
                     DishName = request.DishName,
                     DishDescription = request.DishDescription,
                     Price = request.Price,
                     RestaurantId = request.RestaurantId,
                     Require18 = request.Require18
                 };
-                var updateDish = mapper.Map<Dish>(dishDTO);
-                await _dish.UpdateDishById(updateDish, id);
+                await _dish.UpdateDishById(dish, id);
                 return Ok("Successfully updated!");
             }
-            catch(ArgumentException ex)
+            catch (Exception e)
             {
-                _logger.LogError(ex.Message);
-                return NotFound(ex.Message);
-            }
-            catch(Exception e)
-            {
+                _logger.LogError(e.Message);
                 return BadRequest(e.Message);
             }
         }
@@ -122,22 +116,31 @@ namespace Project_API.Controllers
         public async Task<IActionResult> AddNewDish([FromBody]DishRequestModel request)
         {
             _logger.LogInformation(returnLogMessage("Dish", "AddNewDish"));
-            if (request.DishDescription =="" || request.RestaurantId == 0 || request.Price == 0)
+            if (request.DishDescription =="" || request.RestaurantId <= 0 || request.Price <= 0)
             {
                 return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
             }
             try
             {
-     
-                    var newDish = mapper.Map<Dish>(request);
-                    await _dish.AddNewDish(newDish);
-                    return Ok("Succesfully added!");
+
+                // var newDish = mapper.Map<Dish>(request);
+                var newDish = new Dish()
+                {
+                    DishName = request.DishName,
+                    DishDescription = request.DishDescription,
+                    Price = request.Price,
+                    Require18 = request.Require18,
+                    RestaurantId = request.RestaurantId
+                };
+
+                await _dish.AddNewDish(newDish);
+                return Ok("Succesfully added!");
                 
             }
             catch(Exception ex)
             {
-                _logger?.LogError(ex.Message);
-                return BadRequest(ex.Message);
+                _logger.LogError(ex.Message);
+                return NotFound(ex.Message);
             }
 
 
