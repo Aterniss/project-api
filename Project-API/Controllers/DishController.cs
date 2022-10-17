@@ -13,14 +13,17 @@ namespace Project_API.Controllers
     {
         private readonly IDishRepository _dish;
         private readonly IMapper mapper;
-        public DishController(IDishRepository dish, IMapper mapper)
+        private readonly ILogger<DishController> _logger; 
+        public DishController(IDishRepository dish, IMapper mapper, ILogger<DishController> logger)
         {
             this._dish = dish;
             this.mapper = mapper;
+            this._logger = logger;
         }
         [HttpGet()]
         public async Task<IActionResult> GetAllDishes()
         {
+            _logger.LogInformation("Test log in GetAllDishes");
             var result = await _dish.GetAll();
             var resultDTO = mapper.Map<List<DishDTO>>(result);
             return Ok(resultDTO);
