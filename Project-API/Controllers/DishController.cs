@@ -123,15 +123,15 @@ namespace Project_API.Controllers
             try
             {
 
-                // var newDish = mapper.Map<Dish>(request);
-                var newDish = new Dish()
-                {
-                    DishName = request.DishName,
-                    DishDescription = request.DishDescription,
-                    Price = request.Price,
-                    Require18 = request.Require18,
-                    RestaurantId = request.RestaurantId
-                };
+                 var newDish = mapper.Map<Dish>(request);
+                //var newDish = new Dish()
+                //{
+                //    DishName = request.DishName,
+                //    DishDescription = request.DishDescription,
+                //    Price = request.Price,
+                //    Require18 = request.Require18,
+                //    RestaurantId = request.RestaurantId
+                //};
 
                 await _dish.AddNewDish(newDish);
                 return Ok("Succesfully added!");

@@ -6,6 +6,7 @@ using Project_API.Controllers;
 using Project_API.DTO;
 using Project_API.DTO.RequestModels;
 using Project_API.Models;
+using Project_API.Profiles;
 using Project_API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,10 @@ namespace API_Tests.Controller_tests
 {
     internal class DishControllerTests : FakeDatabase
     {
-        //private readonly Mock<IDishRepository> _dishRepository;
         private DishController _dishController;
-        private readonly Mock<IMapper> _mapper;
-
+        private Mapper mapper;
         DishRepository repo;
-        public DishControllerTests()
-        {
-            // this._dishRepository = new Mock<IDishRepository>();
-            this._mapper = new Mock<IMapper>();
-            //this._dishController = new DishController(_dishRepository.Object, _mapper.Object, new NullLogger<DishController>());
-            //_dbContext = new Mock<MyDbContext>(_context);
-        }
+
 
         [OneTimeSetUp]
         public void Setup()
@@ -38,7 +31,11 @@ namespace API_Tests.Controller_tests
 
             SeedDatabase();
             repo = new DishRepository(_context);
-            _dishController = new DishController(repo, _mapper.Object, new NullLogger<DishController>());
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddProfile<DishProfile>();
+            });
+            mapper = new Mapper(config);
+            _dishController = new DishController(repo, mapper, new NullLogger<DishController>());
         }
         [Test, Order(1)]
         public void HTTPGET_GetAllDishes_ReturnOk_Test()
@@ -97,7 +94,6 @@ namespace API_Tests.Controller_tests
             Task<IActionResult> result = _dishController.UpdateDish(request, id);
             Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
         }
-        //test when dish ID does not exist!
         [Test, Order(7)]
         public void HTTPPUT_UpdateDish_WhenIdIsWrong_ReturnBadRequest()
         {
