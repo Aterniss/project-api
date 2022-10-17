@@ -23,10 +23,17 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllDishes()
         {
-            _logger.LogInformation("Test log in GetAllDishes");
-            var result = await _dish.GetAll();
-            var resultDTO = mapper.Map<List<DishDTO>>(result);
-            return Ok(resultDTO);
+            try
+            {
+                _logger.LogInformation("Test log in GetAllDishes()");
+                var result = await _dish.GetAll();
+                var resultDTO = mapper.Map<List<DishDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Sorry, we could not load the dishes!");
+            }
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

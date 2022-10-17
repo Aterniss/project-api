@@ -4,23 +4,19 @@ using Project_API.Repositories;
 using Serilog;
 using System.Text.Json.Serialization;
 
+
+
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("Logs/log.txt")
     .CreateBootstrapLogger();
-
-Log.Information("Starting up");
 
 try
 {
 
-
-
-
     var builder = WebApplication.CreateBuilder(args);
 
+    Log.Information("Starting up");
     //add serilog
-
     builder.Host.UseSerilog((ctx, lc) => lc
         .WriteTo.Console()
         .WriteTo.File("Logs/log.txt")
@@ -72,8 +68,8 @@ try
 
     app.UseSerilogRequestLogging();
 
-    app.MapGet("/", () => "Hello World!");
-    app.MapGet("/oops", new Func<string>(() => throw new InvalidOperationException("Oops!")));
+    //app.MapGet("/", () => "Hello World!");
+    //app.MapGet("/oops", new Func<string>(() => throw new InvalidOperationException("Oops!")));
 
     app.Run();
 
