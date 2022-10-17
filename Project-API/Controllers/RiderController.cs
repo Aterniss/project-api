@@ -13,14 +13,17 @@ namespace Project_API.Controllers
     {
         private readonly IRiderRepository _rider;
         private readonly IMapper mapper;
-        public RiderController(IRiderRepository rider, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public RiderController(IRiderRepository rider, IMapper mapper, ILogger<DishController> logger)
         {
             this._rider = rider;
             this.mapper = mapper;
+            this._logger = logger;
         }
         [HttpGet()]
         public async Task<IActionResult> GetAllRiders()
         {
+            _logger.LogInformation(returnLogMessage("Rider", "GetAllRiders"));
             var result = await _rider.GetAll();
             var resultDTO = mapper.Map<List<RiderDTO>>(result);
             return Ok(resultDTO);
@@ -28,6 +31,7 @@ namespace Project_API.Controllers
         [HttpGet("{riderId}")]
         public async Task<IActionResult> GetById(int riderId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "GetById"));
             var result = await _rider.GetById(riderId);
             if(result == null)
             {
@@ -42,6 +46,7 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddRider([FromBody]RiderRequestModel request)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "AddRider"));
             if (request.RiderName == "" || request.ZoneId == 0)
             {
                 return BadRequest("The given fields are required!");
@@ -64,6 +69,7 @@ namespace Project_API.Controllers
         [HttpDelete("{riderId}")]
         public async Task<IActionResult> DeleteRiderById(int riderId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "DeleteRiderById"));
             try
             {
                 await _rider.DeleteRider(riderId);
@@ -77,6 +83,7 @@ namespace Project_API.Controllers
         [HttpPut("{riderId}")]
         public async Task<IActionResult> UpdateRiderById([FromBody] RiderRequestModel request, int riderId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "UpdateRiderById"));
             if (request.RiderName == "" || request.ZoneId == 0)
             {
                 return BadRequest("The given fields are required!");
@@ -95,6 +102,10 @@ namespace Project_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }
     }
 }

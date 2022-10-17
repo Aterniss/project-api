@@ -13,16 +13,18 @@ namespace Project_API.Controllers
     {
         private readonly IUserRepository _user;
         private readonly IMapper mapper;
-
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<DishController> logger)
         {
             this._user = userRepository;
             this.mapper = mapper;
+            this._logger = logger;
         }
 
         [HttpGet()]
         public async Task<IActionResult> GetAllUsers()
         {
+            _logger.LogInformation(returnLogMessage("User", "GetAllUsers"));
             var result = await _user.GetAll();
             var resultDTO = mapper.Map<List<UserDTO>>(result);
             return Ok(resultDTO);
@@ -30,6 +32,7 @@ namespace Project_API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetById(int userId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "GetById"));
             var result = await _user.GetById(userId);
             if(result == null)
             {
@@ -41,6 +44,7 @@ namespace Project_API.Controllers
         [HttpGet("get-by-name/{userName}")]
         public async Task<IActionResult> GetByName(string userName)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "GetByName"));
             var result = await _user.GetByName(userName);
             if(result == null)
             {
@@ -52,6 +56,7 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "AddUser"));
             if (request.FullName == "" || request.UserAddress == "")
             {
                 return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
@@ -70,6 +75,7 @@ namespace Project_API.Controllers
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel request, int userId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "UpdateUser"));
             if (request.FullName == "" || request.UserAddress == "")
             {
                 return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
@@ -94,6 +100,7 @@ namespace Project_API.Controllers
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeteleUser(int userId)
         {
+            _logger.LogInformation(returnLogMessage("Rider", "DeleteUser"));
             try
             {
                 await _user.DeleteUser(userId);
@@ -103,6 +110,10 @@ namespace Project_API.Controllers
             {
                 return NotFound(ex.Message);
             }
+        }
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }
     }
 }

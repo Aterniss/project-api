@@ -13,16 +13,18 @@ namespace Project_API.Controllers
     {
         private readonly IFoodCategoryRepository _foodCategory;
         private readonly IMapper mapper;
-
-        public FoodCategoryController(IFoodCategoryRepository foodCategory, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public FoodCategoryController(IFoodCategoryRepository foodCategory, IMapper mapper, ILogger<DishController> logger)
         {
             this._foodCategory = foodCategory;
             this.mapper = mapper;
+            this._logger = logger;
         }
 
         [HttpGet()]
         public async Task<IActionResult> GetAllCategories()
         {
+            _logger.LogInformation(returnLogMessage("FoodCategory","GetAllCategories"));
             var categories = await _foodCategory.GetAllAsync();
             var categoriesDTO = mapper.Map<List<FoodCategoryDTO>>(categories);
             return Ok(categoriesDTO);
@@ -30,6 +32,7 @@ namespace Project_API.Controllers
         [HttpGet("{name}")]
         public async Task<IActionResult> GetByName(string name)
         {
+            _logger.LogInformation(returnLogMessage("FoodCategory","GetByName"));
             var category = await _foodCategory.GetByNameAsync(name);
             var categoryDTO = mapper.Map<FoodCategoryDTO>(category);
             if (categoryDTO == null)
@@ -42,7 +45,8 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddCategoryAsync([FromBody] FoodCategoryDTO addNewCategory)
         {
-            if(addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
+            _logger.LogInformation(returnLogMessage("FoodCategory", "AddCategoryAsync"));
+            if (addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
             {
                 return BadRequest("The given fields cannot be empty!");
             }
@@ -67,6 +71,7 @@ namespace Project_API.Controllers
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCategoryAsync(string name)
         {
+            _logger.LogInformation(returnLogMessage("FoodCategory", "DeleteCategoryAsync"));
             try
             {
                 await _foodCategory.DeleteAsync(name);
@@ -80,6 +85,7 @@ namespace Project_API.Controllers
         [HttpPut("{name}")]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)
         {
+            _logger.LogInformation(returnLogMessage("FoodCategory", "UpdateCategoryAsync"));
             if (newCategory.CategoryDescription == "")
             {
                 return BadRequest("The given field cannot be empty!");
@@ -97,7 +103,10 @@ namespace Project_API.Controllers
             }
             return Ok($"Category: \"{name}\" has been updated");
         }
-
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
+        }
 
     }
 }

@@ -13,15 +13,18 @@ namespace Project_API.Controllers
     {
         private readonly IZoneRepository _zone;
         private readonly IMapper mapper;
-        public ZoneController(IZoneRepository zone, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public ZoneController(IZoneRepository zone, IMapper mapper, ILogger<DishController> logger)
         {
             this._zone = zone;
             this.mapper = mapper;
+            this._logger = logger;
         }
 
         [HttpGet()]
         public async Task<IActionResult> GetAllZones()
         {
+            _logger.LogInformation(returnLogMessage("Zone", "GetAllZones"));
             var result = await _zone.GetAll();
             var resultDTO = mapper.Map<List<ZoneDTO>>(result);
             return Ok(resultDTO);
@@ -29,6 +32,7 @@ namespace Project_API.Controllers
         [HttpGet("{zoneId}")]
         public async Task<IActionResult> GetById(int zoneId)
         {
+            _logger.LogInformation(returnLogMessage("Zone", "GetById"));
             var result = await _zone.GetById(zoneId);
             if(result == null)
             {
@@ -43,7 +47,8 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddZone([FromBody]ZoneRequestModel request)
         {
-            if(request.ZoneName == "")
+            _logger.LogInformation(returnLogMessage("Zone", "AddZone"));
+            if (request.ZoneName == "")
             {
                 return BadRequest("This field is required~!");
             }
@@ -64,6 +69,7 @@ namespace Project_API.Controllers
         [HttpPut("{zoneId}")]
         public async Task<IActionResult> UpdateZone([FromBody]ZoneRequestModel request, int zoneId)
         {
+            _logger.LogInformation(returnLogMessage("Zone", "UpdateZone"));
             try
             {
                 var updateZone = new ZoneDTO()
@@ -82,6 +88,7 @@ namespace Project_API.Controllers
         [HttpDelete("{zoneId}")]
         public async Task<IActionResult> DeleteZone(int zoneId)
         {
+            _logger.LogInformation(returnLogMessage("Zone", "DeleteZone"));
             try
             {
                 await _zone.DeleteZone(zoneId);
@@ -91,6 +98,10 @@ namespace Project_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }
     }
 }

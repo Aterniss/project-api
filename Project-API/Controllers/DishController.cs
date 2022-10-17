@@ -23,9 +23,9 @@ namespace Project_API.Controllers
         [HttpGet()]
         public async Task<IActionResult> GetAllDishes()
         {
+            _logger.LogInformation(returnLogMessage("Dish", "GetAllDishes"));
             try
             {
-                _logger.LogInformation("Test log in GetAllDishes()");
                 var result = await _dish.GetAll();
                 var resultDTO = mapper.Map<List<DishDTO>>(result);
                 return Ok(resultDTO);
@@ -38,6 +38,7 @@ namespace Project_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            _logger.LogInformation(returnLogMessage("Dish", "GetById"));
             var result = await _dish.GetDishById(id);
             if(result == null)
             {
@@ -52,6 +53,7 @@ namespace Project_API.Controllers
         [HttpGet("dishes-name/{dishName}")]
         public async Task<IActionResult> GetByName(string dishName)
         {
+            _logger.LogInformation(returnLogMessage("Dish","GetByName"));
             var result = await _dish.GetDishesByName(dishName);
             if(result == null)
             {
@@ -66,6 +68,7 @@ namespace Project_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateDish([FromBody]DishRequestModel request, int id)
         {
+            _logger.LogInformation(returnLogMessage("Dish", "UpdateDish"));
             if (request.DishDescription == "" || request.RestaurantId == 0 || request.Price == 0)
             {
                 return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
@@ -93,6 +96,7 @@ namespace Project_API.Controllers
         [HttpDelete("{dishId}")]
         public async Task<IActionResult> DeleteDish(int dishId)
         {
+            _logger.LogInformation(returnLogMessage("Dish", "DeleteDish"));
             try
             {
                 await _dish.DeleteDishById(dishId);
@@ -106,7 +110,8 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddNewDish([FromBody]DishRequestModel request)
         {
-            if(request.DishDescription =="" || request.RestaurantId == 0 || request.Price == 0)
+            _logger.LogInformation(returnLogMessage("Dish", "AddNewDish"));
+            if (request.DishDescription =="" || request.RestaurantId == 0 || request.Price == 0)
             {
                 return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
             }
@@ -124,6 +129,10 @@ namespace Project_API.Controllers
             }
 
 
+        }
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }
     }
 }

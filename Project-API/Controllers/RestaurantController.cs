@@ -13,14 +13,17 @@ namespace Project_API.Controllers
     {
         private readonly IRestaurantRepository _restaurant;
         private readonly IMapper mapper;
-        public RestaurantController(IRestaurantRepository restaurant, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public RestaurantController(IRestaurantRepository restaurant, IMapper mapper, ILogger<DishController> logger)
         {
             this._restaurant = restaurant;
             this.mapper = mapper;
+            this._logger = logger;
         }
         [HttpGet()]
         public async Task<IActionResult> GetAllRestaurants()
         {
+            _logger.LogInformation(returnLogMessage("Restaurant", "GetAllRestaurants"));
             var result = await _restaurant.GetAll();
             var restaurantsDTO = mapper.Map<List<RestaurantDTO>>(result);
             return Ok(restaurantsDTO);
@@ -28,6 +31,7 @@ namespace Project_API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
+            _logger.LogInformation(returnLogMessage("Restaurant", "GetById"));
             var result = await _restaurant.GetById(id);
             if(result == null)
             {
@@ -39,7 +43,8 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
-            if(newRestaurant.ZoneId == 0)
+            _logger.LogInformation(returnLogMessage("Restaurant", "AddRestaurant"));
+            if (newRestaurant.ZoneId == 0)
             {
                 return BadRequest("The given field: \"zone id\" is required!");
             }
@@ -63,6 +68,7 @@ namespace Project_API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
+            _logger.LogInformation(returnLogMessage("Restaurant", "DeleteById"));
             try
             {
                 await _restaurant.DeleteRestaurantById(id);
@@ -76,6 +82,7 @@ namespace Project_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {
+            _logger.LogInformation(returnLogMessage("Restaurant", "UpdateRestaurant"));
             if (restaurant.ZoneId == 0)
             {
                 return BadRequest("The given field: \"zone id\" is required!");
@@ -90,8 +97,11 @@ namespace Project_API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        //end
+        private string returnLogMessage(string controllerClassName, string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
+        }
+     
     }
 }
 

@@ -5,10 +5,15 @@ using Serilog;
 using System.Text.Json.Serialization;
 
 
+var configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
     .WriteTo.Console()
     .CreateBootstrapLogger();
+
 
 try
 {
@@ -17,10 +22,8 @@ try
 
     Log.Information("Starting up");
     //add serilog
-    builder.Host.UseSerilog((ctx, lc) => lc
-        .WriteTo.Console()
-        .WriteTo.File("Logs/log.txt")
-        .ReadFrom.Configuration(ctx.Configuration));
+
+    builder.Host.UseSerilog();
 
     // Add services to the container.
 
@@ -67,9 +70,6 @@ try
     app.MapControllers();
 
     app.UseSerilogRequestLogging();
-
-    //app.MapGet("/", () => "Hello World!");
-    //app.MapGet("/oops", new Func<string>(() => throw new InvalidOperationException("Oops!")));
 
     app.Run();
 

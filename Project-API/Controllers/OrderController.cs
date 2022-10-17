@@ -13,14 +13,17 @@ namespace Project_API.Controllers
     {
         private readonly IOrderRepository _order;
         private readonly IMapper mapper;
-        public OrderController(IOrderRepository order, IMapper mapper)
+        private readonly ILogger<DishController> _logger;
+        public OrderController(IOrderRepository order, IMapper mapper, ILogger<DishController> logger)
         {
             this._order = order;
             this.mapper = mapper;
+            this._logger = logger;
         }
         [HttpGet()]
         public async Task<IActionResult> GetAll()
         {
+            _logger.LogInformation(returnLogMessage("Order", "GetAll"));
             var result = await _order.GetAll();
             var resultDTO = mapper.Map<List<OrderDTO>>(result);
             return Ok(resultDTO);
@@ -28,6 +31,7 @@ namespace Project_API.Controllers
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetById(int orderId)
         {
+            _logger.LogInformation(returnLogMessage("Order", "GetById"));
             var result = await _order.GetById(orderId);
             if(result == null)
             {
@@ -42,7 +46,8 @@ namespace Project_API.Controllers
         [HttpPost()]
         public async Task<IActionResult> AddNewOrder([FromBody] OrderRequestModel orderRequest)
         {
-            if(orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
+            _logger.LogInformation(returnLogMessage("Order", "AddNewOrder"));
+            if (orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
             {
                 return BadRequest("The given fields are required!");
             }
@@ -60,6 +65,7 @@ namespace Project_API.Controllers
         [HttpDelete("{orderId}")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
+            _logger.LogInformation(returnLogMessage("Order", "DeleteOrder"));
             try
             {
                 await _order.DeleteOrder(orderId);
@@ -74,6 +80,7 @@ namespace Project_API.Controllers
         [HttpPut("{orderId}")]
         public async Task<IActionResult> UpdateOrder([FromBody]OrderUpdateRequest request, int orderId)
         {
+            _logger.LogInformation(returnLogMessage("Order", "UpdateOrder"));
             if (request.RiderId == 0 || request.IdUser == 0 || request.OrderStatus == "")
             {
                 return BadRequest("The given fields are required!");
@@ -93,6 +100,10 @@ namespace Project_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        private string returnLogMessage(string controllerClassName,string nameMethod)
+        {
+            return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }
     }
 }
