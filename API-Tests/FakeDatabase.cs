@@ -45,6 +45,15 @@ namespace API_Tests
                     RestaurantId = 2,
                     Price = 7.99M,
                     Require18 = false
+                },
+                new Dish()
+                {
+                    DishId =4,
+                    DishName = "Dish nr 4",
+                    DishDescription = "Update",
+                    RestaurantId = 2,
+                    Price = 7.99M,
+                    Require18 = false
                 }
             };
             _context.Dishes.AddRange(dishes);

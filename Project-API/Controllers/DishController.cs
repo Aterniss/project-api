@@ -35,7 +35,7 @@ namespace Project_API.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest("Sorry, we could not load the dishes!");
             }
-        }
+}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -74,7 +74,7 @@ namespace Project_API.Controllers
         public async Task<IActionResult> UpdateDish([FromBody]DishRequestModel request, int id)
         {
             _logger.LogInformation(returnLogMessage("Dish", "UpdateDish"));
-            if (request.DishDescription == "" || request.RestaurantId == 0 || request.Price == 0)
+            if (request.DishName == "" ||request.DishDescription == "" || request.RestaurantId <= 0 || request.Price <= 0)
             {
                 return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
             }
@@ -93,10 +93,14 @@ namespace Project_API.Controllers
                 await _dish.UpdateDishById(updateDish, id);
                 return Ok("Successfully updated!");
             }
-            catch(Exception ex)
+            catch(ArgumentException ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
         [HttpDelete("{dishId}")]
