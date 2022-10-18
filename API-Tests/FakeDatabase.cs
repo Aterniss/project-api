@@ -303,7 +303,17 @@ namespace API_Tests
                     LastUpdate = DateTime.Now.AddDays(-2),
                     UserAddress = "Address 173",
                     IsOver18 = false
+                },
+                new User()
+                {
+                    IdUser = 5,
+                    FullName = "UDelete me",
+                    CreatedAt = DateTime.Now.AddDays(-6),
+                    LastUpdate = DateTime.Now.AddDays(-2),
+                    UserAddress = "Address 173",
+                    IsOver18 = false
                 }
+
             };
             _context.Users.AddRange(users);
 

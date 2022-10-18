@@ -26,8 +26,6 @@ namespace Project_API.Controllers
         {
             try
             {
-
-
                 _logger.LogInformation(returnLogMessage("User", "GetAllUsers"));
                 var result = await _user.GetAll();
                 var resultDTO = mapper.Map<List<UserDTO>>(result);
@@ -42,57 +40,89 @@ namespace Project_API.Controllers
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetById(int userId)
         {
-            _logger.LogInformation(returnLogMessage("Rider", "GetById"));
-            var result = await _user.GetById(userId);
-            if(result == null)
+            if(userId <= 0)
             {
-                var msg = $"User with ID: \"{userId}\" has not been found!";
-                _logger.LogWarning(msg);
-                return NotFound(msg);
+                return BadRequest("ID must be greater than 0!");
             }
-            var resultDTO = mapper.Map<UserDTO>(result);
-            return Ok(resultDTO);
-        }
-        [HttpGet("get-by-name/{userName}")]
-        public async Task<IActionResult> GetByName(string userName)
-        {
-            _logger.LogInformation(returnLogMessage("Rider", "GetByName"));
-            var result = await _user.GetByName(userName);
-            if(result == null)
-            {
-                var msg = $"User with fullname: \"{userName}\" has not been found!";
-                _logger.LogWarning(msg);
-                return BadRequest(msg);
-            }
-            var resultDTO = mapper.Map<List<UserDTO>>(result);
-            return Ok(resultDTO);
-        }
-        [HttpPost()]
-        public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
-        {
             try
             {
-                _logger.LogInformation(returnLogMessage("Rider", "AddUser"));
-                if (request.FullName == "" || request.UserAddress == "")
+                _logger.LogInformation(returnLogMessage("Rider", "GetById"));
+                var result = await _user.GetById(userId);
+                if (result == null)
                 {
-                    return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+                    var msg = $"User with ID: \"{userId}\" has not been found!";
+                    _logger.LogWarning(msg);
+                    return NotFound(msg);
                 }
-                var newUser = new User()
-                {
-                    FullName = request.FullName,
-                    CreatedAt = DateTime.Now,
-                    LastUpdate = DateTime.Now,
-                    UserAddress = request.UserAddress,
-                    IsOver18 = request.IsOver18
-                };
-                await _user.AddUser(newUser);
-                return Ok("Succesfully added!");
+                var resultDTO = mapper.Map<UserDTO>(result);
+                return Ok(resultDTO);
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return BadRequest("sorry you could not add new user!");
+                return BadRequest("Something went wrong!");
             }
+        }
+        [HttpGet("get-by-name/{userName}")]
+        public async Task<IActionResult> GetByName(string userName)
+        {
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Rider", "GetByName"));
+                var result = await _user.GetByName(userName);
+                if (result == null)
+                {
+                    var msg = $"User with fullname: \"{userName}\" has not been found!";
+                    _logger.LogWarning(msg);
+                    return BadRequest(msg);
+                }
+                var resultDTO = mapper.Map<List<UserDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Something went wrong!");
+            }
+        }
+        [HttpPost()]
+        public async Task<IActionResult> AddUser([FromBody]UserRequestModel request)
+        {
+            if (request.FullName == "" || request.UserAddress == "")
+            {
+                var msg = $"The given fields: \"Your name\" and \"Your address\" are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
+            else
+            {
+                try
+                {
+                    _logger.LogInformation(returnLogMessage("Rider", "AddUser"));
+                    if (request.FullName == "" || request.UserAddress == "")
+                    {
+                        var msg = $"The given fields: \"Your name\" and \"Your address\" are required!";
+                        _logger.LogWarning(msg);
+                        return BadRequest(msg);
+                    }
+                    var newUser = new User()
+                    {
+                        FullName = request.FullName,
+                        CreatedAt = DateTime.Now,
+                        LastUpdate = DateTime.Now,
+                        UserAddress = request.UserAddress,
+                        IsOver18 = request.IsOver18
+                    };
+                    await _user.AddUser(newUser);
+                    return Ok("Succesfully added!");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    return BadRequest("sorry you could not add new user!");
+                }
+            }
+            
         }
         [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateUser([FromBody]UserRequestModel request, int userId)
@@ -132,7 +162,7 @@ namespace Project_API.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         private string returnLogMessage(string controllerClassName, string nameMethod)
