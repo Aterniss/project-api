@@ -13,6 +13,7 @@ namespace Project_API.Repositories
 
         public async Task AddRestaurant(Restaurant newRestaurant)
         {
+            
             await CheckZoneAndCategoryName(newRestaurant.CategoryName, newRestaurant.ZoneId);
             _dbContext.Add(newRestaurant);
             await _dbContext.SaveChangesAsync();

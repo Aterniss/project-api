@@ -27,7 +27,9 @@ namespace Project_API.Controllers
             {
                 _logger.LogInformation(returnLogMessage("Restaurant", "GetAllRestaurants"));
                 var result = await _restaurant.GetAll();
+
                 var restaurantsDTO = mapper.Map<List<RestaurantDTO>>(result);
+
                 return Ok(restaurantsDTO);
             }
             catch (Exception ex)
@@ -43,8 +45,9 @@ namespace Project_API.Controllers
             var result = await _restaurant.GetById(id);
             if(result == null)
             {
-                _logger.LogWarning("not found!");
-                return NotFound($"Restaurant with ID: \"{id}\" was not founded!");
+                var msg = $"Restaurant with ID: \"{id}\" was not founded!";
+                _logger.LogWarning(msg);
+                return NotFound(msg);
             }
             var resultDTO = mapper.Map<RestaurantDTO>(result);
             return Ok(resultDTO);
@@ -53,9 +56,9 @@ namespace Project_API.Controllers
         public async Task<IActionResult> AddRestaurant([FromBody]RestaurantRequestModel newRestaurant)
         {
             _logger.LogInformation(returnLogMessage("Restaurant", "AddRestaurant"));
-            if (newRestaurant.ZoneId == 0)
+            if (newRestaurant.ZoneId <= 0 || newRestaurant.RestaurantName == "" || newRestaurant.RestaurantAddress == "" || newRestaurant.CategoryName == "")
             {
-                var msg = "The given field: \"zone id\" is required!";
+                var msg = "The given fields are required!";
                 _logger.LogError(msg);
                 return BadRequest(msg);
             }
@@ -96,9 +99,11 @@ namespace Project_API.Controllers
         public async Task<IActionResult> UpdateRestaurant([FromBody]RestaurantRequestModel restaurant, int id)
         {
             _logger.LogInformation(returnLogMessage("Restaurant", "UpdateRestaurant"));
-            if (restaurant.ZoneId == 0)
+            if (restaurant.ZoneId <= 0 || restaurant.RestaurantName == "" || restaurant.RestaurantAddress == "" || restaurant.CategoryName == "")
             {
-                return BadRequest("The given field: \"zone id\" is required!");
+                var msg = "The given fields are required!";
+                _logger.LogError(msg);
+                return BadRequest(msg);
             }
             try
             {

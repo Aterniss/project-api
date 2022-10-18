@@ -9,14 +9,10 @@ namespace Project_API.Profiles
     {
         public RestaurantProfile()
         {
-            CreateMap<Restaurant, RestaurantDTO>()
-                .ReverseMap();
-            CreateMap<FoodCategory, FoodCategoryDTO>()
-         .ReverseMap();
-            CreateMap<Zone, ZoneDTO>()
-         .ReverseMap();
-            CreateMap<Restaurant, RestaurantRequestModel>()
-         .ReverseMap();
+            CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
+            CreateMap<FoodCategory, FoodCategoryDTO>().ReverseMap();
+            CreateMap<Zone, ZoneDTO>().ReverseMap();
+            CreateMap<Dish, DishDTO>().ReverseMap();
         }
     }
 }

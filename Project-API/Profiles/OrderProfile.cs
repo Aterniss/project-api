@@ -11,6 +11,7 @@ namespace Project_API.Profiles
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Rider, RiderDTO>().ReverseMap();
+            CreateMap<OrderDish, OrderDishDTO>().ReverseMap();
         }
     }
 }

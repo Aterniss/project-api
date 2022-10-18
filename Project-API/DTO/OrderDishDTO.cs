@@ -9,6 +9,6 @@ namespace Project_API.DTO
         public int DishId { get; set; }
 
          public virtual DishDTO Dish { get; set; } = null!;
-        //public virtual OrderDTO Order { get; set; } = null!;
+         //public virtual OrderDTO Order { get; set; } = null!;
     }
 }

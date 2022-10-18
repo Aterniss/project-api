@@ -16,7 +16,7 @@ namespace API_Tests.Controller_tests
     internal class OrderControllerTests : FakeDatabase
     {
         private OrderController _order;
-        private Mapper mapper;
+        private IMapper _mapper;
         OrderRepository repo;
         [OneTimeSetUp]
         public void Setup()
@@ -24,13 +24,12 @@ namespace API_Tests.Controller_tests
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
-            SeedDatabase();
             repo = new OrderRepository(_context);
-            var configs = new MapperConfiguration(cfg => {
-                cfg.AddProfile<OrderProfile>();
-            });
-            mapper = new Mapper(configs);
-            _order = new OrderController(repo, mapper, new NullLogger<OrderController>());
+            var profile = new OrderProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
+            _mapper = new Mapper(configuration);
+            _order = new OrderController(repo, _mapper, new NullLogger<OrderController>());
+            SeedDatabase();
         }
         [Test, Order(1)]
         public void HTTPGET_GetAll_WithoutException_ReturnOk()
@@ -38,7 +37,7 @@ namespace API_Tests.Controller_tests
             var response = _order.GetAll();
             Assert.DoesNotThrowAsync(() => response);
             Assert.That(response, Is.Not.Null);
-            //Assert.That(response.Result, Is.TypeOf<OkObjectResult>());
+           // Assert.That(response.Result, Is.TypeOf<OkObjectResult>());
         }
 
         //rest I will do later

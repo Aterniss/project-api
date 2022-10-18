@@ -92,6 +92,14 @@ namespace API_Tests
                     RestaurantAddress = "Address 4",
                     ZoneId = 3
                 },
+                new Restaurant()
+                {
+                    RestaurantId = 5,
+                    RestaurantName = "Restaurant name 5",
+                    CategoryName = "category name 2",
+                    RestaurantAddress = "Address 4",
+                    ZoneId = 2
+                },
 
 
             };
