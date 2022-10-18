@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IFoodCategoryRepository _foodCategory;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public FoodCategoryController(IFoodCategoryRepository foodCategory, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<FoodCategoryController> _logger;
+        public FoodCategoryController(IFoodCategoryRepository foodCategory, IMapper mapper, ILogger<FoodCategoryController> logger)
         {
             this._foodCategory = foodCategory;
             this.mapper = mapper;
@@ -26,7 +26,7 @@ namespace Project_API.Controllers
         {
             try
             {
-                _logger.LogInformation(returnLogMessage("FoodCategory", "GetAllCategories"));
+                _logger.LogInformation(ReturnLogMessage("FoodCategory", "GetAllCategories"));
                 var categories = await _foodCategory.GetAllAsync();
                 var categoriesDTO = mapper.Map<List<FoodCategoryDTO>>(categories);
                 return Ok(categoriesDTO);
@@ -40,29 +40,36 @@ namespace Project_API.Controllers
         [HttpGet("{name}")]
         public async Task<IActionResult> GetByName(string name)
         {
-            _logger.LogInformation(returnLogMessage("FoodCategory","GetByName"));
-            var category = await _foodCategory.GetByNameAsync(name);
-            var categoryDTO = mapper.Map<FoodCategoryDTO>(category);
-            if (categoryDTO == null)
+            try
             {
-                var msg = $"Category with name: \"{name}\" is not founded!";
-                _logger.LogWarning(msg);
-                return NotFound(msg);
+                _logger.LogInformation(ReturnLogMessage("FoodCategory", "GetByName"));
+                var category = await _foodCategory.GetByNameAsync(name);
+                var categoryDTO = mapper.Map<FoodCategoryDTO>(category);
+                if (categoryDTO == null)
+                {
+                    var msg = $"Category with name: \"{name}\" is not founded!";
+                    _logger.LogWarning(msg);
+                    return NotFound(msg);
+                }
+                return Ok(categoryDTO);
             }
-            return Ok(categoryDTO);
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the category!");
+            }
 
         }
         [HttpPost()]
         public async Task<IActionResult> AddCategoryAsync([FromBody] FoodCategoryDTO addNewCategory)
         {
-            _logger.LogInformation(returnLogMessage("FoodCategory", "AddCategoryAsync"));
+            _logger.LogInformation(ReturnLogMessage("FoodCategory", "AddCategoryAsync"));
             if (addNewCategory.CategoryName == "" || addNewCategory.CategoryDescription == "")
             {
                 var msg = "The given fields cannot be empty!";
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
-
             try
             {
                 //Request DTO to domain model
@@ -85,7 +92,7 @@ namespace Project_API.Controllers
         [HttpDelete("{name}")]
         public async Task<IActionResult> DeleteCategoryAsync(string name)
         {
-            _logger.LogInformation(returnLogMessage("FoodCategory", "DeleteCategoryAsync"));
+            _logger.LogInformation(ReturnLogMessage("FoodCategory", "DeleteCategoryAsync"));
             try
             {
                 await _foodCategory.DeleteAsync(name);
@@ -100,7 +107,7 @@ namespace Project_API.Controllers
         [HttpPut("{name}")]
         public async Task<IActionResult> UpdateCategoryAsync([FromBody] FoodCategoryRequestModel newCategory, string name)
         {
-            _logger.LogInformation(returnLogMessage("FoodCategory", "UpdateCategoryAsync"));
+            _logger.LogInformation(ReturnLogMessage("FoodCategory", "UpdateCategoryAsync"));
             if (newCategory.CategoryDescription == "")
             {
                 var msg = "The given field cannot be empty!";
@@ -122,7 +129,7 @@ namespace Project_API.Controllers
             }
             return Ok($"Category: \"{name}\" has been updated");
         }
-        private string returnLogMessage(string controllerClassName, string nameMethod)
+        private string ReturnLogMessage(string controllerClassName, string nameMethod)
         {
             return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
         }

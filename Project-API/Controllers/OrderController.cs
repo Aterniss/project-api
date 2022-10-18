@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IOrderRepository _order;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public OrderController(IOrderRepository order, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<OrderController> _logger;
+        public OrderController(IOrderRepository order, IMapper mapper, ILogger<OrderController> logger)
         {
             this._order = order;
             this.mapper = mapper;

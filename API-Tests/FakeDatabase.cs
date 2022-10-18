@@ -129,6 +129,11 @@ namespace API_Tests
                     CategoryName = "update",
                     CategoryDescription = "description 4"
                 },
+                 new FoodCategory()
+                {
+                    CategoryName = "update me",
+                    CategoryDescription = "description 4"
+                },
             };
             _context.FoodCategories.AddRange(foodCategories);
 

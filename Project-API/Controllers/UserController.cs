@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IUserRepository _user;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IUserRepository userRepository, IMapper mapper, ILogger<UserController> logger)
         {
             this._user = userRepository;
             this.mapper = mapper;

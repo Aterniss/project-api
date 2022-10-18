@@ -50,9 +50,9 @@ namespace API_Tests.Controller_tests
             Task<IActionResult> actionResult = _dishController.GetById(id);
             Assert.That(actionResult.Result, Is.TypeOf<OkObjectResult>());
             Assert.DoesNotThrowAsync(() => actionResult);
-            //var dish = (actionResult.Result as OkObjectResult).Value as DishDTO;
-            //Assert.That(dish.DishId, Is.EqualTo(id));
-            
+            var dish = (actionResult.Result as OkObjectResult).Value as DishDTO;
+            Assert.That(dish.DishId, Is.EqualTo(id));
+            Assert.That(dish.DishName, Is.EqualTo("Dish nr 3"));  
         }
         [Test, Order(3)]
         public void HTTPGET_GetById_ReturnNotFound_WhenIdDOesNotExist_Test()
@@ -168,7 +168,6 @@ namespace API_Tests.Controller_tests
                 Require18 = false,
                 RestaurantId = 99
             };
-            // I need to know, why when I use AutoMapper I can not convert DTO with models
             Task<IActionResult> result = _dishController.AddNewDish(request);
             Assert.That(result.Result, Is.TypeOf<NotFoundObjectResult>());
         }
@@ -187,20 +186,6 @@ namespace API_Tests.Controller_tests
             Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
             Assert.DoesNotThrowAsync(() => result);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [OneTimeTearDown]
         public void CleanUp()
         {

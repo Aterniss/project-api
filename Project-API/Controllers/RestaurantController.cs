@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IRestaurantRepository _restaurant;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public RestaurantController(IRestaurantRepository restaurant, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<RestaurantController> _logger;
+        public RestaurantController(IRestaurantRepository restaurant, IMapper mapper, ILogger<RestaurantController> logger)
         {
             this._restaurant = restaurant;
             this.mapper = mapper;

@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IZoneRepository _zone;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public ZoneController(IZoneRepository zone, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<ZoneController> _logger;
+        public ZoneController(IZoneRepository zone, IMapper mapper, ILogger<ZoneController> logger)
         {
             this._zone = zone;
             this.mapper = mapper;

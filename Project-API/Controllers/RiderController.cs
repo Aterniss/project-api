@@ -13,8 +13,8 @@ namespace Project_API.Controllers
     {
         private readonly IRiderRepository _rider;
         private readonly IMapper mapper;
-        private readonly ILogger<DishController> _logger;
-        public RiderController(IRiderRepository rider, IMapper mapper, ILogger<DishController> logger)
+        private readonly ILogger<RiderController> _logger;
+        public RiderController(IRiderRepository rider, IMapper mapper, ILogger<RiderController> logger)
         {
             this._rider = rider;
             this.mapper = mapper;
