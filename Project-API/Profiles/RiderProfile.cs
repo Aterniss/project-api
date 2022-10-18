@@ -9,6 +9,7 @@ namespace Project_API.Profiles
         public RiderProfile()
         {
             CreateMap<Rider, RiderDTO>().ReverseMap();
+            CreateMap<Zone, ZoneDTO>().ReverseMap();
         }
     }
 }

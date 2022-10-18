@@ -18,7 +18,7 @@ namespace API_Tests.Controller_tests
     {
         private RestaurantController _restaurant;
         private IMapper _mapper;
-        RestaurantRepository repo;
+        private RestaurantRepository repo;
 
         [OneTimeSetUp]
         public void Setup()
@@ -177,7 +177,6 @@ namespace API_Tests.Controller_tests
             Assert.DoesNotThrowAsync(() => result);
             Assert.That(result.Result, Is.TypeOf<OkObjectResult>());
         }
-
 
 
 

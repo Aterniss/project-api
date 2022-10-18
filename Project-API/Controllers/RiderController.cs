@@ -57,7 +57,7 @@ namespace Project_API.Controllers
         public async Task<IActionResult> AddRider([FromBody]RiderRequestModel request)
         {
             _logger.LogInformation(returnLogMessage("Rider", "AddRider"));
-            if (request.RiderName == "" || request.ZoneId == 0)
+            if (request.RiderName == "" || request.ZoneId <= 0)
             {
                 return BadRequest("The given fields are required!");
             }
