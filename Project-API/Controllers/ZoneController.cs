@@ -83,6 +83,12 @@ namespace Project_API.Controllers
         public async Task<IActionResult> UpdateZone([FromBody]ZoneRequestModel request, int zoneId)
         {
             _logger.LogInformation(returnLogMessage("Zone", "UpdateZone"));
+            if (request.ZoneName == "")
+            {
+                var msg = "This field is required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
             try
             {
                 var updateZone = new ZoneDTO()
@@ -96,7 +102,7 @@ namespace Project_API.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete("{zoneId}")]
