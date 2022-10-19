@@ -10,11 +10,6 @@ namespace API_Tests
 {
     internal class FakeDatabase
     {
-        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
-        .UseInMemoryDatabase(databaseName: "API-Tests")
-        .Options;
-
-        public DbContextOptions<MyDbContext> DbContextOptions { get; set; }
         public void SeedDatabase(MyDbContext _context)
         {
             var dishes = new List<Dish>
