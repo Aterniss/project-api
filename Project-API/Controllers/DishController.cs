@@ -76,7 +76,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Dish", "UpdateDish"));
             if (request.DishName == "" ||request.DishDescription == "" || request.RestaurantId <= 0 || request.Price <= 0)
             {
-                return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
+                var msg = $"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {
@@ -118,21 +120,13 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Dish", "AddNewDish"));
             if (request.DishDescription =="" || request.RestaurantId <= 0 || request.Price <= 0)
             {
-                return BadRequest($"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!");
+                var msg = $"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {
-
-                 var newDish = mapper.Map<Dish>(request);
-                //var newDish = new Dish()
-                //{
-                //    DishName = request.DishName,
-                //    DishDescription = request.DishDescription,
-                //    Price = request.Price,
-                //    Require18 = request.Require18,
-                //    RestaurantId = request.RestaurantId
-                //};
-
+                var newDish = mapper.Map<Dish>(request);
                 await _dish.AddNewDish(newDish);
                 return Ok("Succesfully added!");
                 

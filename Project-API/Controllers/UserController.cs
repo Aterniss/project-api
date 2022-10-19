@@ -130,7 +130,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Rider", "UpdateUser"));
             if (request.FullName == "" || request.UserAddress == "")
             {
-                return BadRequest($"The given fields: \"Your name\" and \"Your address\" are required!");
+                var msg = $"The given fields: \"Your name\" and \"Your address\" are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {

@@ -19,7 +19,7 @@ namespace API_Tests.Controller_tests
     internal class DishControllerTests : FakeDatabase
     {
         private DishController _dishController;
-        private Mapper mapper;
+        private IMapper _mapper;
         DishRepository repo;
 
 
@@ -31,11 +31,10 @@ namespace API_Tests.Controller_tests
 
             SeedDatabase();
             repo = new DishRepository(_context);
-            var config = new MapperConfiguration(cfg => {
-                cfg.AddProfile<DishProfile>();
-            });
-            mapper = new Mapper(config);
-            _dishController = new DishController(repo, mapper, new NullLogger<DishController>());
+            var profile = new DishProfile();
+            var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
+            _mapper = new Mapper(configuration);
+            _dishController = new DishController(repo, _mapper, new NullLogger<DishController>());
         }
         [Test, Order(1)]
         public void HTTPGET_GetAllDishes_ReturnOk_Test()

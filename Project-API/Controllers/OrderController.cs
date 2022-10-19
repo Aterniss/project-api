@@ -28,14 +28,7 @@ namespace Project_API.Controllers
                 _logger.LogInformation(returnLogMessage("Order", "GetAll"));
                 var result = await _order.GetAll();
                 var resultDTO = mapper.Map<List<OrderDTO>>(result);
-                //var resultDTO = new Order()
-                //{
-                //    OrderId = 1,
-                //    IdUser = 1,
-                //    CreatedAt = DateTime.Now.AddDays(-19),
-                //    RiderId = 1
 
-                //};
                 return Ok(resultDTO);
             }
             catch (Exception ex)

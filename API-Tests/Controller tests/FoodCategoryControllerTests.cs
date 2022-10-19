@@ -18,7 +18,7 @@ namespace API_Tests.Controller_tests
     internal class FoodCategoryControllerTests : FakeDatabase
     {
         private FoodCategoryController _foodCategory;
-        private Mapper mapper;
+        private IMapper mapper;
         FoodCategoryRepository repo;
 
         [OneTimeSetUp]
