@@ -28,6 +28,14 @@ namespace Project_API.Controllers
                 _logger.LogInformation(returnLogMessage("Order", "GetAll"));
                 var result = await _order.GetAll();
                 var resultDTO = mapper.Map<List<OrderDTO>>(result);
+                //var resultDTO = new Order()
+                //{
+                //    OrderId = 1,
+                //    IdUser = 1,
+                //    CreatedAt = DateTime.Now.AddDays(-19),
+                //    RiderId = 1
+
+                //};
                 return Ok(resultDTO);
             }
             catch (Exception ex)
@@ -58,7 +66,7 @@ namespace Project_API.Controllers
         public async Task<IActionResult> AddNewOrder([FromBody] OrderRequestModel orderRequest)
         {
             _logger.LogInformation(returnLogMessage("Order", "AddNewOrder"));
-            if (orderRequest.RiderId == 0 || orderRequest.IdUser == 0 || orderRequest.OrderStatus == "")
+            if (orderRequest.RiderId <= 0 || orderRequest.IdUser <= 0 || orderRequest.OrderStatus == "" || orderRequest.Dishes.Count <= 0)
             {
                 var msg = "The given fields are required!";
                 _logger.LogWarning(msg);
@@ -88,7 +96,7 @@ namespace Project_API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
           
         }
@@ -98,7 +106,9 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Order", "UpdateOrder"));
             if (request.RiderId == 0 || request.IdUser == 0 || request.OrderStatus == "")
             {
-                return BadRequest("The given fields are required!");
+                var msg = "The given fields are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
             }
             try
             {
