@@ -1,4 +1,5 @@
-﻿using Project_API.DTO.RequestModels;
+﻿using Microsoft.EntityFrameworkCore;
+using Project_API.DTO.RequestModels;
 using Project_API.Models;
 using Project_API.Repositories;
 using System;
@@ -9,17 +10,22 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Repository_tests
 {
-    internal class OrderRepositoryTests : FakeDatabase
+    internal class OrderRepositoryTests
     {
         OrderRepository _order;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
 
+        protected MyDbContext _context;
         [OneTimeSetUp]
         public void Setup()
         {
+            var db = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
-            SeedDatabase();
+            db.SeedDatabase(_context);
 
             _order = new OrderRepository(_context);
         }

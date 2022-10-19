@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Project_API.Controllers;
 using Project_API.DTO.RequestModels;
@@ -14,16 +15,21 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Controller_tests
 {
-    internal class ZoneControllerTests : FakeDatabase
+    internal class ZoneControllerTests
     {
         private ZoneController _controller;
         private IMapper _mapper;
         private ZoneRepository repo;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
 
+        protected MyDbContext _context;
 
         [OneTimeSetUp]
         public void Setup()
         {
+            var database = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
@@ -34,7 +40,7 @@ namespace API_Tests.Controller_tests
 
 
             _controller = new ZoneController(repo, _mapper, new NullLogger<ZoneController>());
-            SeedDatabase();
+            database.SeedDatabase(_context);
         }
         [Test, Order(1)]
         public void HTTPGET_GetAllZones_WithoutException_ReturnOk()

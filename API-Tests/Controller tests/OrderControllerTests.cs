@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Project_API.Controllers;
 using Project_API.DTO.RequestModels;
@@ -14,14 +15,20 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Controller_tests
 {
-    internal class OrderControllerTests : FakeDatabase
+    internal class OrderControllerTests
     {
         private OrderController _order;
         private IMapper _mapper;
         OrderRepository repo;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
+
+        protected MyDbContext _context;
         [OneTimeSetUp]
         public void Setup()
         {
+            var database = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
@@ -30,7 +37,7 @@ namespace API_Tests.Controller_tests
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
             _mapper = new Mapper(configuration);
             _order = new OrderController(repo, _mapper, new NullLogger<OrderController>());
-            SeedDatabase();
+            database.SeedDatabase(_context);
         }
         [Test, Order(1)]
         public void HTTPGET_GetAll_WithoutException_ReturnOk()

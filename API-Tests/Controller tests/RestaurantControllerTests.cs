@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Project_API.Controllers;
 using Project_API.DTO.RequestModels;
@@ -14,15 +15,21 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Controller_tests
 {
-    internal class RestaurantControllerTests : FakeDatabase
+    internal class RestaurantControllerTests
     {
         private RestaurantController _restaurant;
         private IMapper _mapper;
         private RestaurantRepository repo;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
+
+        protected MyDbContext _context;
 
         [OneTimeSetUp]
         public void Setup()
         {
+            var database= new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
@@ -33,7 +40,7 @@ namespace API_Tests.Controller_tests
             
 
             _restaurant = new RestaurantController(repo, _mapper, new NullLogger<RestaurantController>());
-            SeedDatabase();
+            database.SeedDatabase(_context);
         }
         [Test, Order(1)]
         public void HTTPGET_GetAllRestaurants_WithoutException_ReturnOk()

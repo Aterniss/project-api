@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project_API.Models;
-using Project_API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace API_Tests
 {
-    public class FakeDatabase
+    internal class FakeDatabase
     {
         protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
         .UseInMemoryDatabase(databaseName: "API-Tests")
         .Options;
-        protected MyDbContext _context;
-        protected void SeedDatabase()
+
+        public DbContextOptions<MyDbContext> DbContextOptions { get; set; }
+        public void SeedDatabase(MyDbContext _context)
         {
             var dishes = new List<Dish>
             {

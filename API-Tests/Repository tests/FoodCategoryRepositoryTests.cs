@@ -1,4 +1,5 @@
-﻿using Project_API.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Project_API.Models;
 using Project_API.Repositories;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,22 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Repository_tests
 {
-    internal class FoodCategoryRepositoryTests : FakeDatabase
+    internal class FoodCategoryRepositoryTests
     {
         FoodCategoryRepository _category;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
 
+        protected MyDbContext _context;
         [OneTimeSetUp]
         public void Setup()
         {
+            var db = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
-            SeedDatabase();
+            db.SeedDatabase(_context);
 
             _category = new FoodCategoryRepository(_context);
         }

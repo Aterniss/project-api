@@ -4,18 +4,24 @@ using Project_API.Repositories;
 
 namespace API_Tests.Repository_tests
 {
-    public class DishRepositoryTests : FakeDatabase
+    public class DishRepositoryTests
     {
 
         DishRepository _dishRepository;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
+
+        protected MyDbContext _context;
 
         [OneTimeSetUp]
         public void Setup()
         {
+            var db = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
-            SeedDatabase();
+            db.SeedDatabase(_context);
 
             _dishRepository = new DishRepository(_context);
         }

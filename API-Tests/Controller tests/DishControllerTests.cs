@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Project_API.Controllers;
@@ -16,20 +17,27 @@ using System.Threading.Tasks;
 
 namespace API_Tests.Controller_tests
 {
-    internal class DishControllerTests : FakeDatabase
+    internal class DishControllerTests
     {
         private DishController _dishController;
         private IMapper _mapper;
         DishRepository repo;
+        protected static DbContextOptions<MyDbContext> dbContextOptions = new DbContextOptionsBuilder<MyDbContext>()
+            .UseInMemoryDatabase(databaseName: "API-Tests")
+            .Options;
+
+        protected MyDbContext _context;
 
 
         [OneTimeSetUp]
         public void Setup()
         {
+            var database = new FakeDatabase();
             _context = new MyDbContext(dbContextOptions);
             _context.Database.EnsureCreated();
 
-            SeedDatabase();
+            
+            database.SeedDatabase(_context);
             repo = new DishRepository(_context);
             var profile = new DishProfile();
             var configuration = new MapperConfiguration(cfg => cfg.AddProfile(profile));
@@ -78,7 +86,68 @@ namespace API_Tests.Controller_tests
             Assert.DoesNotThrowAsync(() => actionResult);
         }
         [Test, Order(6)]
-        public void HTTPPUT_UpdateDish_WhenFieldsAreEmpty_ReturnBadRequest()
+        public void HTTPPUT_UpdateDish_WhenNameIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "",
+                DishDescription = "text",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            int id = 2;
+
+            Task<IActionResult> result = _dishController.UpdateDish(request, id);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(14)]
+        public void HTTPPUT_UpdateDish_WhenDescriptionIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "Dish Name",
+                DishDescription = "",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            int id = 2;
+            Task<IActionResult> result = _dishController.UpdateDish(request, id);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(15)]
+        public void HTTPPUT_UpdateDish_WhenPriceIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "Dish Name",
+                DishDescription = "text",
+                Price = 0,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            int id = 2;
+            Task<IActionResult> result = _dishController.UpdateDish(request, id);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(16)]
+        public void HTTPPUT_UpdateDish_WhenRestaurantIdIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "Dish Name",
+                DishDescription = "text",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 0
+            };
+            int id = 2;
+            Task<IActionResult> result = _dishController.UpdateDish(request, id);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(17)]
+        public void HTTPPUT_UpdateDish_WhenAllFieldsAreEmpty_ReturnBadRequest()
         {
             var request = new DishRequestModel()
             {
@@ -89,7 +158,6 @@ namespace API_Tests.Controller_tests
                 RestaurantId = 0
             };
             int id = 2;
-
             Task<IActionResult> result = _dishController.UpdateDish(request, id);
             Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
         }
@@ -150,6 +218,62 @@ namespace API_Tests.Controller_tests
                 DishName = "",
                 DishDescription = "",
                 Price = 0,
+                Require18 = false,
+                RestaurantId = 0
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(18)]
+        public void HTTPPOST_AddNewDish_WhenNameIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "",
+                DishDescription = "text",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(19)]
+        public void HTTPPOST_AddNewDish_WhenDescriptionIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "Text",
+                DishDescription = "",
+                Price = 1,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(20)]
+        public void HTTPPOST_AddNewDish_WhenPriceIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "text",
+                DishDescription = "text",
+                Price = 0,
+                Require18 = false,
+                RestaurantId = 1
+            };
+            Task<IActionResult> result = _dishController.AddNewDish(request);
+            Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
+        }
+        [Test, Order(21)]
+        public void HTTPPOST_AddNewDish_WhenRestaurantIdIsEmpty_ReturnBadRequest()
+        {
+            var request = new DishRequestModel()
+            {
+                DishName = "text",
+                DishDescription = "text",
+                Price = 1,
                 Require18 = false,
                 RestaurantId = 0
             };

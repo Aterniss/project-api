@@ -76,7 +76,7 @@ namespace Project_API.Controllers
             _logger.LogInformation(returnLogMessage("Dish", "UpdateDish"));
             if (request.DishName == "" ||request.DishDescription == "" || request.RestaurantId <= 0 || request.Price <= 0)
             {
-                var msg = $"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!";
+                var msg = $"Fields: \"Dish name\", \"Dish_description\", \"restaurant id\" and \"price\" are required!";
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
@@ -118,7 +118,7 @@ namespace Project_API.Controllers
         public async Task<IActionResult> AddNewDish([FromBody]DishRequestModel request)
         {
             _logger.LogInformation(returnLogMessage("Dish", "AddNewDish"));
-            if (request.DishDescription =="" || request.RestaurantId <= 0 || request.Price <= 0)
+            if (request.DishName == "" || request.DishDescription =="" || request.RestaurantId <= 0 || request.Price <= 0)
             {
                 var msg = $"Fields: \"Dish_description\", \"restaurant id\" and \"price\" are required!";
                 _logger.LogWarning(msg);
