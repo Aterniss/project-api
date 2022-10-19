@@ -114,7 +114,7 @@ namespace Project_API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
+                _logger.LogWarning(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

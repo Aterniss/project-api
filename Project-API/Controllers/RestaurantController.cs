@@ -107,10 +107,18 @@ namespace Project_API.Controllers
             }
             try
             {
-                var updateRestaurant = mapper.Map<Restaurant>(restaurant);
+                var updateRestaurant = new Restaurant()
+                {
+                    RestaurantAddress = restaurant.RestaurantAddress,
+                    RestaurantId = id,
+                    RestaurantName = restaurant.RestaurantName,
+                    CategoryName = restaurant.CategoryName,
+                    ZoneId = restaurant.ZoneId
+                };
                 await _restaurant.UpdateRestaurant(id, updateRestaurant);
                 return Ok("The restaurant has been updated!");
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
                 return BadRequest(ex.Message);

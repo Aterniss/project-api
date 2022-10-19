@@ -149,29 +149,28 @@ namespace API_Tests.Controller_tests
         [Test, Order(10)]
         public void HTTPPUT_UpdateRestaurant_WithException_ReturnBadRequest()
         {
-            int id = 2;
+            int id = 3;
             var request = new RestaurantRequestModel()
             {
-                CategoryName = "Cat1",
-                RestaurantAddress = "Address 150",
                 RestaurantName = "Some name",
-                ZoneId = 1
+                RestaurantAddress = "Address 150",
+                CategoryName = "never existed!",
+                ZoneId = 9991
             };
             var result = _restaurant.UpdateRestaurant(request, id);
             Assert.DoesNotThrowAsync(() => result);
             Assert.That(result.Result, Is.TypeOf<BadRequestObjectResult>());
         }
         [Test, Order(11)]
-        [Ignore("Mapping does not work correctly!")]
         public void HTTPPUT_UpdateRestaurant_WithoutException_ReturnOk()
         {
-            int id = 5;
+            int id = 3;
             var request = new RestaurantRequestModel()
             {
                 CategoryName = "category name 1",
-                RestaurantAddress = "Address 150",
-                RestaurantName = "Some name",
-                ZoneId = 1
+                RestaurantAddress = "Address 151",
+                RestaurantName = "Some name 1",
+                ZoneId = 2
             };
             var result = _restaurant.UpdateRestaurant(request, id);
             Assert.DoesNotThrowAsync(() => result);
