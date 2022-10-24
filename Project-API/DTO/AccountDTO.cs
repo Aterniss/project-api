@@ -13,6 +13,8 @@ namespace Project_API.DTO
         public int? RestaurantId { get; set; }
         public int Role { get; set; }
 
+        public virtual UserDTO? IdUsersNavigation { get; set; }
+        public virtual RestaurantDTO? Restaurant { get; set; }
         public virtual RoleDTO RoleNavigation { get; set; } = null!;
     }
 }

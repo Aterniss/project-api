@@ -49,6 +49,21 @@ namespace Project_API.Repositories
             return result;
         }
 
+        public async Task<Account> Login(string username, string password)
+        {
+            var result = await _context.Accounts.Where(x => x.UserName == username && x.UserPassword == password).FirstOrDefaultAsync();
+            if(result == null)
+            {
+                return null;
+            }
+            else
+            {
+                return result;
+            }
+
+
+        }
+
         public async Task Update(Account account, int id)
         {
             var result = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == id);
@@ -69,5 +84,7 @@ namespace Project_API.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+
     }
 }

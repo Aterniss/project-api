@@ -9,6 +9,7 @@ namespace Project_API.Repositories
         Task Add(Account account);
         Task Update(Account account, int id);
         Task Delete(int id);
+        Task<Account> Login(string username, string password);
 
     }
 }

@@ -61,13 +61,13 @@ namespace Project_API.Controllers
         public async Task<IActionResult> DeleteAccount(int id)
         {
             _logger.LogInformation(ReturnLogMessage("Account", "DeleteAccount"));
-            if(id <= 0)
+            if (id <= 0)
             {
                 var msg = $"The ID can not be less or equal to 0!";
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
-            else if(id == 1)
+            else if (id == 1)
             {
                 var msg = $"You can not delete Admin account!";
                 _logger.LogWarning(msg);
@@ -94,7 +94,7 @@ namespace Project_API.Controllers
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
-            else if(IsValidEmail(request.EmailAddress) == false)
+            else if (IsValidEmail(request.EmailAddress) == false)
             {
                 var msg = $"Email address format is invalid!";
                 _logger.LogWarning(msg);
@@ -139,8 +139,8 @@ namespace Project_API.Controllers
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
-            //try
-            //{
+            try
+            {
                 var newAccount = new Account()
                 {
                     UserName = request.UserName,
@@ -154,14 +154,41 @@ namespace Project_API.Controllers
                 await _account.Update(newAccount, id);
                 return Ok("Succesfully updated!");
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogError(ex.Message);
-            //    return NotFound(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound(ex.Message);
+            }
         }
+        [HttpGet("{username}, {password}")]
+        public async Task<IActionResult> Login(string username, string password)
+        {
+            if(username == null || password == null)
+            {
+                var msg = "Please enter username and password!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
+            try
+            {
+                var result = await _account.Login(username, password);
+                _logger.LogInformation(ReturnLogMessage("Account", "Login"));
+                if(result == null)
+                {
+                    var msg = "Username or password is incorrect!";
+                    _logger.LogWarning(msg);
+                    return BadRequest(msg);
+                }
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
 
+        }
 
 
 
@@ -172,7 +199,7 @@ namespace Project_API.Controllers
                 MailAddress mail = new MailAddress(email);
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
