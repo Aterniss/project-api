@@ -65,7 +65,7 @@ namespace API_Tests.Controller_tests
         public void HTTPGET_GetById_ReturnNotFound_WhenIdDOesNotExist_Test()
         {
             int id = 999;
-            Task<IActionResult> actionResult = _dishController.GetById(id);
+            var actionResult = _dishController.GetById(id);
             Assert.That(actionResult.Result, Is.TypeOf<NotFoundObjectResult>());
             Assert.DoesNotThrowAsync(() => actionResult);
         }
