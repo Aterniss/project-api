@@ -43,6 +43,7 @@ try
     builder.Services.AddScoped<IOrderRepository, OrderRepository>();
     builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
     builder.Services.AddScoped<IRiderRepository, RiderRepository>();
+    builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 
     //added extra
     builder.Services.AddControllers().AddJsonOptions(x =>
