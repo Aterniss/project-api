@@ -7,6 +7,7 @@ namespace Project_API.Models
     {
         public User()
         {
+            Accounts = new HashSet<Account>();
             Orders = new HashSet<Order>();
         }
 
@@ -17,6 +18,7 @@ namespace Project_API.Models
         public string UserAddress { get; set; } = null!;
         public bool? IsOver18 { get; set; }
 
+        public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

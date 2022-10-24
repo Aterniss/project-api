@@ -7,6 +7,7 @@ namespace Project_API.Models
     {
         public Restaurant()
         {
+            Accounts = new HashSet<Account>();
             Dishes = new HashSet<Dish>();
         }
 
@@ -18,6 +19,7 @@ namespace Project_API.Models
 
         public virtual FoodCategory? CategoryNameNavigation { get; set; }
         public virtual Zone Zone { get; set; } = null!;
+        public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Dish> Dishes { get; set; }
     }
 }

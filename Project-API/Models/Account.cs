@@ -14,6 +14,8 @@ namespace Project_API.Models
         public int? RestaurantId { get; set; }
         public int Role { get; set; }
 
+        public virtual User? IdUsersNavigation { get; set; }
+        public virtual Restaurant? Restaurant { get; set; }
         public virtual Role RoleNavigation { get; set; } = null!;
     }
 }

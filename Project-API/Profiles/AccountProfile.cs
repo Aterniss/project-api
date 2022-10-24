@@ -10,6 +10,8 @@ namespace Project_API.Profiles
         {
             CreateMap<Account, AccountDTO>().ReverseMap();
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Restaurant, RestaurantDTO>().ReverseMap();
         }
     }
 }

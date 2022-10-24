@@ -33,7 +33,10 @@ namespace Project_API.Repositories
 
         public async Task<IEnumerable<Account>> GetAll()
         {
-            return await _context.Accounts.ToListAsync();
+            return await _context.Accounts
+                .Include(x => x.Restaurant)
+                .Include(x => x.IdUsersNavigation)
+                .ToListAsync();
         }
 
         public async Task<Account> GetById(int id)

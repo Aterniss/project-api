@@ -29,7 +29,7 @@ namespace Project_API.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-         
+        
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,9 +38,7 @@ namespace Project_API.Models
             {
                 entity.ToTable("accounts");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.EmailAddress)
                     .HasMaxLength(255)
@@ -67,6 +65,16 @@ namespace Project_API.Models
                     .HasMaxLength(255)
                     .IsUnicode(false)
                     .HasColumnName("user_password");
+
+                entity.HasOne(d => d.IdUsersNavigation)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.IdUsers)
+                    .HasConstraintName("FK_accounts_users");
+
+                entity.HasOne(d => d.Restaurant)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.RestaurantId)
+                    .HasConstraintName("FK_accounts_restaurants");
 
                 entity.HasOne(d => d.RoleNavigation)
                     .WithMany(p => p.Accounts)

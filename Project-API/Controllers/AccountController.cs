@@ -4,6 +4,7 @@ using Project_API.DTO;
 using Project_API.DTO.RequestModels;
 using Project_API.Models;
 using Project_API.Repositories;
+using System.Net.Mail;
 
 namespace Project_API.Controllers
 {
@@ -60,6 +61,18 @@ namespace Project_API.Controllers
         public async Task<IActionResult> DeleteAccount(int id)
         {
             _logger.LogInformation(ReturnLogMessage("Account", "DeleteAccount"));
+            if(id <= 0)
+            {
+                var msg = $"The ID can not be less or equal to 0!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
+            else if(id == 1)
+            {
+                var msg = $"You can not delete Admin account!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
             try
             {
                 await _account.Delete(id);
@@ -78,6 +91,12 @@ namespace Project_API.Controllers
             if (request.EmailAddress == "" || request.UserName == "" || request.UserPassword == "")
             {
                 var msg = $"Fields: \"User name\", \"Password\" and \"e-mail\" are required!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
+            else if(IsValidEmail(request.EmailAddress) == false)
+            {
+                var msg = $"Email address format is invalid!";
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
@@ -106,6 +125,7 @@ namespace Project_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAccount([FromBody] AccountAdminRequest request, int id)
         {
+            var trimmedEmail = request.EmailAddress.Trim();
             _logger.LogInformation(ReturnLogMessage("Account", "UpdateAccount"));
             if (request.EmailAddress == "" || request.UserName == "" || request.UserPassword == "")
             {
@@ -113,33 +133,50 @@ namespace Project_API.Controllers
                 _logger.LogWarning(msg);
                 return BadRequest(msg);
             }
-            try
+            else if (IsValidEmail(request.EmailAddress) == false)
             {
+                var msg = $"Email address format is invalid!";
+                _logger.LogWarning(msg);
+                return BadRequest(msg);
+            }
+            //try
+            //{
                 var newAccount = new Account()
                 {
                     UserName = request.UserName,
                     UserPassword = request.UserPassword,
                     EmailAddress = request.EmailAddress,
-                    TelNumber = request.TelNumber = null,
-                    Role = request.Role = 1,
-                    RestaurantId = request.RestaurantId = null,
-                    IdUsers = request.IdUsers = null
+                    TelNumber = request.TelNumber,
+                    Role = request.Role,
+                    RestaurantId = request.RestaurantId,
+                    IdUsers = request.IdUsers
                 };
-                await _account.Add(newAccount);
-                return Ok("Succesfully added!");
+                await _account.Update(newAccount, id);
+                return Ok("Succesfully updated!");
 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return NotFound(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    _logger.LogError(ex.Message);
+            //    return NotFound(ex.Message);
+            //}
         }
 
 
 
 
-
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                MailAddress mail = new MailAddress(email);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
         private string ReturnLogMessage(string controllerClassName, string nameMethod)
         {
             return $"Controller: {controllerClassName}Controller: Request: {nameMethod}()";
