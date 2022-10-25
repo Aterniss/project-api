@@ -155,6 +155,11 @@ namespace Project_API.Controllers
                 return Ok("Succesfully updated!");
 
             }
+            catch (BadHttpRequestException e)
+            {
+                _logger.LogWarning(e.Message);
+                return BadRequest(e.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -181,6 +186,11 @@ namespace Project_API.Controllers
                     return BadRequest(msg);
                 }
                 return Ok(result);
+            }
+            catch (BadHttpRequestException e)
+            {
+                _logger.LogWarning(e.Message);
+                return BadRequest(e.Message);
             }
             catch(Exception ex)
             {

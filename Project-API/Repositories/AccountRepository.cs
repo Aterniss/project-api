@@ -13,8 +13,17 @@ namespace Project_API.Repositories
         }
         public async Task Add(Account account)
         {
-            await _context.AddAsync(account);
-            await _context.SaveChangesAsync();
+            var checkUsername = await _context.Accounts.FirstOrDefaultAsync(x => x.UserName == account.UserName);
+            if(checkUsername == null)
+            {
+                await _context.AddAsync(account);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new BadHttpRequestException("Username already exists!");
+            }
+            
         }
 
         public async Task Delete(int id)
@@ -73,15 +82,26 @@ namespace Project_API.Repositories
             }
             else
             {
-                result.UserPassword = account.UserPassword;
-                result.Role = account.Role;
-                result.TelNumber = account.TelNumber;
-                result.UserName = account.UserName;
-                result.RestaurantId = account.RestaurantId;
-                result.IdUsers = account.IdUsers;
-                result.EmailAddress = account.EmailAddress;
+                var checkUsername = await _context.Accounts.FirstOrDefaultAsync(x => x.UserName == account.UserName);
+                if(checkUsername != null)
+                {
+                    throw new BadHttpRequestException("Username already exists!");
+                }
+                else
+                {
+                    result.UserPassword = account.UserPassword;
+                    result.Role = account.Role;
+                    result.TelNumber = account.TelNumber;
+                    result.UserName = account.UserName;
+                    result.RestaurantId = account.RestaurantId;
+                    result.IdUsers = account.IdUsers;
+                    result.EmailAddress = account.EmailAddress;
 
-                await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
+
+                }
+
+                
             }
         }
 
