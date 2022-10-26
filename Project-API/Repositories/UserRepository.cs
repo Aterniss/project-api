@@ -27,6 +27,16 @@ namespace Project_API.Repositories
             }
             else
             {
+                var orders = await _context.Orders.Where(x => x.IdUser == id).ToListAsync();
+                if (orders.Any())
+                {
+                    foreach(var order in orders)
+                    {
+                        var dishesTodelete = await _context.OrderDishes.Where(x => x.OrderId == order.OrderId).ToListAsync();
+                        _context.RemoveRange(dishesTodelete);
+                    }
+                    _context.Orders.RemoveRange(orders);
+                }
                 _context.Users.Remove(existUser);
                 await _context.SaveChangesAsync();
             }
