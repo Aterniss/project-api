@@ -32,10 +32,17 @@ namespace Project_API.Repositories
             var existRider = await _context.Riders.FirstOrDefaultAsync(x => x.RiderId == id);
             if(existRider != null)
             {
-                _context.Riders.Remove(existRider);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Riders.Remove(existRider);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    throw new BadHttpRequestException("You cannot delete this rider because he has order assignment!");
+                }
             }
-            else
+            else if(existRider == null)
             {
                 throw new Exception($"Rider with ID: \"{id}\" has not been found!");
             }

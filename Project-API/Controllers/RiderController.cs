@@ -86,6 +86,11 @@ namespace Project_API.Controllers
                 await _rider.DeleteRider(riderId);
                 return Ok("Succesfully deleted!");
             }
+            catch(BadHttpRequestException e)
+            {
+                _logger.LogWarning(e.Message);
+                return BadRequest(e.Message);
+            }
             catch(Exception ex)
             {
                 _logger.LogWarning(ex.Message);

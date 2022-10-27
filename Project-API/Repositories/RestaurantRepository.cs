@@ -25,8 +25,11 @@ namespace Project_API.Repositories
             var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == id);
             if(result != null)
             {
+               var dishes = await _dbContext.Dishes.Where(x => x.RestaurantId == id).ToListAsync();
+               _dbContext.Dishes.RemoveRange(dishes);
                _dbContext.Restaurants.Remove(result);
                await _dbContext.SaveChangesAsync();
+               
             }
             else
             {
