@@ -39,11 +39,11 @@ namespace Project_API.Controllers
 
         }
         [HttpGet("restaurant/{restaurantId}")]
-        public async Task<IActionResult> GetAllId(int restaurantId)
+        public async Task<IActionResult> GetAllIByRestaurantID(int restaurantId)
         {
             try
             {
-                _logger.LogInformation(returnLogMessage("Order", "GetAll"));
+                _logger.LogInformation(returnLogMessage("Order", "GetAllIByRestaurantID"));
                 var result = await _order.GetAllId(restaurantId);
                 var resultDTO = mapper.Map<List<OrderDTO>>(result);
 

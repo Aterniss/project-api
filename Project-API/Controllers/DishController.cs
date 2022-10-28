@@ -37,9 +37,9 @@ namespace Project_API.Controllers
             }
         }
         [HttpGet("restaurant/{restaurantId}")]
-        public async Task<IActionResult> GetAllDishes(int restaurantId)
+        public async Task<IActionResult> GetAllDishesByRestaurantId(int restaurantId)
         {
-            _logger.LogInformation(returnLogMessage("Dish", "GetAllDishes"));
+            _logger.LogInformation(returnLogMessage("Dish", "GetAllDishesByRestaurantId"));
             try
             {
                 var result = await _dish.GetAllForRestaurant(restaurantId);

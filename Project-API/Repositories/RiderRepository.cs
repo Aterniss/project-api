@@ -55,6 +55,19 @@ namespace Project_API.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Rider>> GetAllId(int restaurantId)
+        {
+            var restaurant = await _context.Restaurants
+                .FirstOrDefaultAsync(x => x.RestaurantId == restaurantId);
+
+
+            return await _context.Riders
+                .Include(x => x.Zone)
+                .Where(x => x.ZoneId == restaurant.ZoneId)
+                .ToListAsync();
+                
+        }
+
         public async Task<Rider> GetById(int id)
         {
             var existRider = await _context.Riders

@@ -20,6 +20,22 @@ namespace Project_API.Controllers
             this.mapper = mapper;
             this._logger = logger;
         }
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<IActionResult> GetAllRidersByRestaurantId(int restaurantId)
+        {
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Rider", "GetAllRidersByRestaurantId"));
+                var result = await _rider.GetAllId(restaurantId);
+                var resultDTO = mapper.Map<List<RiderDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the riders!");
+            }
+        }
         [HttpGet()]
         public async Task<IActionResult> GetAllRiders()
         {
@@ -30,7 +46,7 @@ namespace Project_API.Controllers
                 var resultDTO = mapper.Map<List<RiderDTO>>(result);
                 return Ok(resultDTO);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return BadRequest("Sorry, we could not load the riders!");
