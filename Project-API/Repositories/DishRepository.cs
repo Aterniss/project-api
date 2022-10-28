@@ -47,6 +47,11 @@ namespace Project_API.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Dish>> GetAllForRestaurant(int restaurantId)
+        {
+            return await _context.Dishes.Where(x => x.RestaurantId == restaurantId).ToListAsync();
+        }
+
         public async Task<Dish> GetDishById(int id)
         {
             var result = await _context.Dishes

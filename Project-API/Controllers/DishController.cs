@@ -35,7 +35,23 @@ namespace Project_API.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest("Sorry, we could not load the dishes!");
             }
-}
+        }
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<IActionResult> GetAllDishes(int restaurantId)
+        {
+            _logger.LogInformation(returnLogMessage("Dish", "GetAllDishes"));
+            try
+            {
+                var result = await _dish.GetAllForRestaurant(restaurantId);
+                var resultDTO = mapper.Map<List<DishDTO>>(result);
+                return Ok(resultDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the dishes!");
+            }
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

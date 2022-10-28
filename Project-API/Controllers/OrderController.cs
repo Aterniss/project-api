@@ -38,6 +38,24 @@ namespace Project_API.Controllers
             }
 
         }
+        [HttpGet("restaurant/{restaurantId}")]
+        public async Task<IActionResult> GetAllId(int restaurantId)
+        {
+            try
+            {
+                _logger.LogInformation(returnLogMessage("Order", "GetAll"));
+                var result = await _order.GetAllId(restaurantId);
+                var resultDTO = mapper.Map<List<OrderDTO>>(result);
+
+                return Ok(resultDTO);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest("Sorry, we could not load the orders!");
+            }
+
+        }
         [HttpGet("{orderId}")]
         public async Task<IActionResult> GetById(int orderId)
         {

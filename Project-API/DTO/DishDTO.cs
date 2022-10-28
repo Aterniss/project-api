@@ -9,6 +9,6 @@
         public decimal Price { get; set; }
         public bool? Require18 { get; set; }
 
-        //public virtual RestaurantDTO Restaurant { get; set; } = null!;
+       //public virtual RestaurantDTO Restaurant { get; set; } = null!;
     }
 }

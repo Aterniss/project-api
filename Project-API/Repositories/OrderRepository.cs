@@ -131,5 +131,14 @@ namespace Project_API.Repositories
 
             }
         }
+
+        public async Task<IEnumerable<Order>> GetAllId(int restaurantId)
+        {
+            return await _context.Orders
+                .Include(x => x.Rider).ThenInclude(x => x.Zone)
+                .Include(x => x.IdUserNavigation)
+                .Include(x => x.OrderDishes).ThenInclude(x => x.Dish).Where(x => x.OrderDishes.Any(x => x.Dish.RestaurantId == restaurantId))
+                .ToListAsync();
+        }
     }
 }
