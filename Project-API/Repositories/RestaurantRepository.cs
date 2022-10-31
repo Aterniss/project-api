@@ -13,8 +13,24 @@ namespace Project_API.Repositories
 
         public async Task AddRestaurant(Restaurant newRestaurant)
         {
-            
-            await CheckZoneAndCategoryName(newRestaurant.CategoryName, newRestaurant.ZoneId);
+
+            var checkZoneId = await _dbContext.Zones.FirstOrDefaultAsync(x => x.ZoneId == newRestaurant.ZoneId);
+            var checkCategory = await _dbContext.FoodCategories.FirstOrDefaultAsync(x => x.CategoryName == newRestaurant.CategoryName);
+            if (checkZoneId == null || checkCategory == null)
+            {
+                if (checkZoneId != null && checkCategory == null)
+                {
+                    throw new Exception($"The given \"category\" does not exist.");
+                }
+                else if (checkZoneId == null && checkCategory != null)
+                {
+                    throw new Exception($"The given \"zone id\" does not exist.");
+                }
+                else if (checkCategory == null && checkZoneId == null)
+                {
+                    throw new Exception($"The given \"zone id\" and \"category\" does not exist.");
+                }
+            }
             _dbContext.Add(newRestaurant);
             await _dbContext.SaveChangesAsync();
 
