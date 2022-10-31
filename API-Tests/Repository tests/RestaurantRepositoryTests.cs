@@ -35,28 +35,7 @@ namespace API_Tests.Repository_tests
             Assert.That(result, Is.Not.Null);
             Assert.DoesNotThrowAsync(() => result);
         }
-        [Test, Order(2)]
-        public void CheckZoneAndCategoryName_CheckIfZoneDoesNotExist_ReturnCorrectException()
-        {
-
-            var categoryName = "category name 1";
-            var zoneId = 99;
-            Assert.That(() => _restaurant.CheckZoneAndCategoryName(categoryName, zoneId), Throws.Exception.With.Message.EqualTo($"The given \"zone id\" does not exist."));
-        }
-        [Test, Order(3)]
-        public void CheckZoneAndCategoryName_CheckIfCategoryNameDoesNotExist_ReturnCorrectException()
-        {
-            var categoryName = "sample text";
-            var zoneId = 1;
-            Assert.That(() => _restaurant.CheckZoneAndCategoryName(categoryName, zoneId), Throws.Exception.With.Message.EqualTo($"The given \"category\" does not exist."));
-        }
-        [Test, Order(4)]
-        public void CheckZoneAndCategoryName_CheckIfCategoryNameAndZoneDoesNotExist_ReturnCorrectException()
-        {
-            var categoryName = "sample text";
-            var zoneId = 999;
-            Assert.That(() => _restaurant.CheckZoneAndCategoryName(categoryName, zoneId), Throws.Exception.With.Message.EqualTo($"The given \"zone id\" and \"category\" does not exist."));
-        }
+        
         [Test, Order(5)]
         public void AddRestaurant_WithoutException_Test()
         {

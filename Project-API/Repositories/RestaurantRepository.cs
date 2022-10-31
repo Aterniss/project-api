@@ -110,68 +110,6 @@ namespace Project_API.Repositories
 
                 await _dbContext.SaveChangesAsync();
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            //var result = await _dbContext.Restaurants.FirstOrDefaultAsync(x => x.RestaurantId == id);
-            //var zone = _dbContext.Zones.FirstOrDefaultAsync( x => x.ZoneId == updateRestaurant.ZoneId);
-            //var category = _dbContext.FoodCategories.FirstOrDefaultAsync(x => x.CategoryName == updateRestaurant.CategoryName);
-            //if (result == null)
-            //{
-            //    throw new Exception($"Restaurant with ID: \"{id}\" does not exist!");
-            //}
-            //else
-            //{
-            //    if(zone == null || category == null)
-            //    {
-            //        throw new Exception($"Category name or zone ID is wrong!");
-            //    }
-            //     else
-            //    {
-
-            //        result.RestaurantName = updateRestaurant.RestaurantName;
-            //        result.RestaurantAddress = updateRestaurant.RestaurantAddress;
-            //        result.CategoryName = updateRestaurant.CategoryName;
-            //        result.ZoneId = updateRestaurant.ZoneId;
-
-            //        await _dbContext.SaveChangesAsync();
-            //    }
-            //}
-
-        }
-
-        public async Task CheckZoneAndCategoryName(string categoryName, int zoneId)
-        {
-            var zone = await _dbContext.Zones.Select(x => x.ZoneId == zoneId).FirstOrDefaultAsync();
-            var category = await _dbContext.FoodCategories.Select(x => x.CategoryName == categoryName).FirstOrDefaultAsync();
-            if (zone == true && category == false)
-            {
-                throw new Exception($"The given \"category\" does not exist.");
-            }
-            else if (zone == false && category == true)
-            {
-                throw new Exception($"The given \"zone id\" does not exist."); 
-            }
-            else if (category == false && zone == false)
-            {
-                throw new Exception($"The given \"zone id\" and \"category\" does not exist."); 
-            }
         }
 
       
