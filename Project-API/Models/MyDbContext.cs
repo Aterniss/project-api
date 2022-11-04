@@ -9,6 +9,7 @@ namespace Project_API.Models
     {
         public MyDbContext()
         {
+
         }
 
         public MyDbContext(DbContextOptions<MyDbContext> options)
