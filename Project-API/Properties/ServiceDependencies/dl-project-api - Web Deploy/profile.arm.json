@@ -21,7 +21,7 @@
     },
     "resourceName": {
       "type": "string",
-      "defaultValue": "FoodDeliveryProjectAPI20221104115218",
+      "defaultValue": "dl-project-api",
       "metadata": {
         "description": "Name of the main resource to be created by this template."
       }
