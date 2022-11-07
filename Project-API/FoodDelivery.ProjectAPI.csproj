@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Project_API</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/41e50375-b926-4bc4-9045-348f359cf721/resourceGroups/pers-dominik_lichota-rg/providers/microsoft.insights/components/API-insights</ApplicationInsightsResourceId>
+    <UserSecretsId>b497be1a-1772-4696-9807-ba4302889f69</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +17,8 @@
     <PackageReference Include="Automapper" Version="12.0.0" />
     <PackageReference Include="Automapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.PerfCounterCollector" Version="2.21.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
@@ -28,6 +32,7 @@
     </PackageReference>
     <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0-dev-00285" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
     <PackageReference Include="Serilog.Sinks.Map" Version="1.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />

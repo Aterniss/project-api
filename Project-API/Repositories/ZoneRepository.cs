@@ -46,7 +46,7 @@ namespace Project_API.Repositories
                         _context.Zones.Remove(existZone);
                         await _context.SaveChangesAsync();
                     }
-                    catch(Exception e)
+                    catch(Exception)
                     {
                         throw new Exception($"You can not delete this Zone, because some rider has this zone asigned!");
                     }

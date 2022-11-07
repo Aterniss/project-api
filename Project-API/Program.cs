@@ -1,4 +1,6 @@
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Project_API.Models;
 using Project_API.Repositories;
 using Serilog;
@@ -9,16 +11,22 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(configuration)
-    .WriteTo.Console()
-    .CreateBootstrapLogger();
+
 
 
 try
 {
 
     var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddApplicationInsightsTelemetry();
+
+    var sp = builder.Services.BuildServiceProvider();
+    var telemetryConfig = sp.GetRequiredService<TelemetryConfiguration>();
+    Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .WriteTo.ApplicationInsights(telemetryConfig, TelemetryConverter.Traces)
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
     Log.Information("Starting up");
     //add serilog
@@ -36,6 +44,9 @@ try
         options.UseSqlServer(builder.Configuration.GetConnectionString("Api-Project"));
     });
 
+    //application insightsTelemetery
+
+
     builder.Services.AddScoped<IFoodCategoryRepository, FoodCategoryRepository>();
     builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>();
     builder.Services.AddScoped<IDishRepository, DishRepository>();
@@ -44,6 +55,8 @@ try
     builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
     builder.Services.AddScoped<IRiderRepository, RiderRepository>();
     builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+
+
 
     //added extra
     builder.Services.AddControllers().AddJsonOptions(x =>

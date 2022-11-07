@@ -37,7 +37,7 @@ namespace Project_API.Repositories
                     _context.Riders.Remove(existRider);
                     await _context.SaveChangesAsync();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw new BadHttpRequestException("You cannot delete this rider because he has order assignment!");
                 }
